@@ -6,6 +6,11 @@
 ### Executive Summary
 > "Right now, traditional banks only own the transaction. We want Capital One to own the inspiration, the organization, and the execution of the entire travel journey. By pairing an interactive, collaborative travel planner with a gamified, real-time rewards layer called **City Key**, we transform our mobile app from a passive financial utility into an indispensable companion that enhances the actual vacation."
 
+
+### Elevator Pitch
+Traditional banks only own the transaction. We want Capital One to own the inspiration, the organization, and the execution of the entire travel journey. By pairing an interactive Venture Planner with a gamified City Key layer, we transform our app from a passive financial utility into an active companion that brings the vacation to life. Real-time swipe milestones instantly unlock localized, merchant-funded rewards, capturing 100% of destination wallet share.
+
+
 ### The Problem
 When cardholders travel, they frequently experience "rewards paralysis" or slip into card abandonment—shifting their spend to local cash, transit cards, or competitor cards with localized promotions. Because banks historically enter the picture only at the point of sale, they miss out on high-margin, pre-trip booking commissions and lose destination wallet share. 
 
@@ -23,3 +28,5 @@ Our solution captures 100% of the travel lifecycle through two modular, highly c
 ### Leading KPIs
 * **Trip Share of Wallet (SoW):** Percentage of total trip cost (pre-trip booking + on-trip spend) captured on a Capital One card.
 * **Destination Wallet Supremacy (DWS):** The ratio of a customer’s travel spending captured on the card versus their historical baseline spend in that specific destination tier.
+
+
