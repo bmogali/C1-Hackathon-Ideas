@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Venture Key — Capital One, end to end</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          c1blue: '#0276b1', c1navy: '#013d5b', c1red: '#cc2427',
+          key: '#37d6ea', keyg: '#9fd356',
+        },
+        fontFamily: {
+          display: ['Fraunces', 'Georgia', 'serif'],
+          sans: ['"Space Grotesk"', 'Helvetica', 'Arial', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        },
+      }
+    }
+  }
+</script>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="min-h-screen font-sans">
+
+<!-- Capital One logo symbol (official mark · Wikimedia Commons SVG) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="c1logo" viewBox="0 0 418 150">
+    <path d="M283.7,108.5h-.1c-17.8,12.6-38.8,25.8-61.5,39.7l-.9.5a.7.7,0,1,0,.8,1.1l.7-.4c19.3-10,41.4-21.9,63.6-34.2l.4-.2A24.7,24.7,0,0,1,283.7,108.5ZM400.5,13.9c-28-30.9-208.6-3.1-285.3,13.7l-1.8.4a.8.8,0,0,0-.6.8.6.6,0,0,0,.8.5l1.8-.3C179,17.7,311.3,2,339.7,30.2c8.7,8.6,6.7,19.7-3.4,32.8a25.7,25.7,0,0,1,11,15.8C386.6,52.7,413,27.7,400.5,13.9Z" fill="#cc2427"/>
+    <g fill="var(--logo-word, #013d5b)">
+      <path d="m133 84.3a10.4 10.4 0 0 0-6.1 2 9.4 9.4 0 0 0-3.3 6c-0.6 3.1-0.3 5.2 0.9 6.6a7.1 7.1 0 0 0 5.3 2 10.2 10.2 0 0 0 4.4-0.9 8.1 8.1 0 0 0 3.3-2.8 12.5 12.5 0 0 0 1.9-4.6c0.5-2.8 0.1-4.8-1.2-6.2a6.7 6.7 0 0 0-5.2-2.1zm-31.1 38.8 8.3-46.8h15l-1.2 6a14.2 14.2 0 0 1 6.3-4.5 27 27 0 0 1 9.7-2c3.9 0 6.3 0.2 9.2 1.7a12.4 12.4 0 0 1 6 6.6 16.8 16.8 0 0 1 0.8 9.5 20.7 20.7 0 0 1-8.4 13.7c-4.6 3.3-8.7 4.2-14.6 4.2a20.4 20.4 0 0 1-5.3-0.6 12.1 12.1 0 0 1-3.4-1.3 15.5 15.5 0 0 1-2.8-2.6l-2.8 16.1zm173.1-12.1h-17.4l8.8-48.6 16.9 0.4zm-86.8-35.1 1.2-7.1 17.8-3.8-1.9 10.9h8.8l-1.7 7.1h-8.5l-5.1 28h-17.3l5.2-28h-6.5l1.3-7h6.7zm-138.6 22.6a62.3 62.3 0 0 1-14.2 1.5c-8.1 0-14.6-4-14.2-11.5 0.2-4.9 6.1-15.3 20.9-15.3a24.3 24.3 0 0 1 13.3 3.6l2.1-12.1a40.3 40.3 0 0 0-16.8-2.8c-19.5 0.2-38.2 9-40.5 27s20 22.9 29.9 22.9c5.7 0 11.7-0.3 17.2-0.8zm189.7-3.5-2.9 0.8-6.7 1.2a10.8 10.8 0 0 0-4.5 1.4 3 3 0 0 0-1.5 2.2 2.2 2.2 0 0 0 0.9 2.4c0.9 0.6 2.3 0.8 4.3 0.8a16.1 16.1 0 0 0 4.4-0.6 10.2 10.2 0 0 0 3.6-1.9 5.1 5.1 0 0 0 1.5-2.3 22.4 22.4 0 0 0 0.9-4zm18.4-11.5c-0.1 1.7-0.4 3.3-0.8 5.8l-3.1 17.5a3.2 3.2 0 0 0 1.7 3.6v0.6h-17.9v-4.5a36 36 0 0 1-8.6 3.7 32.2 32.2 0 0 1-8.6 1c-5.7 0-9-0.6-11.3-2.6s-3.4-3.4-3.3-6.2a9.5 9.5 0 0 1 2.2-5.2 13.3 13.3 0 0 1 4.7-3.3 25.4 25.4 0 0 1 7.1-2c3.2-0.5 7.6-1 13.5-1.5a24 24 0 0 0 5.8-1.3c1.2-0.5 1.7-1 1.9-2s-0.2-2.8-2.6-3.3c-6.4-1.3-18.4 0.8-24.6 2.3l3.3-9a161.7 161.7 0 0 1 23.9-2c12.7 0.1 16.8 3.8 16.7 8.4zm-102.2 27.5 6.2-34.9h17.1l-6.2 34.9zm7.2-42.9c0.5-2.9 5-5.2 10.1-5.2s8.7 2.3 8.2 5.2-5 5.2-10.1 5.2-8.7-2.4-8.2-5.2zm-77.2 26.8a13 13 0 0 1-2.9 0.8l-6.6 1.2a10.8 10.8 0 0 0-4.6 1.4 3.2 3.2 0 0 0-1.5 2.3 2.1 2.1 0 0 0 1 2.3 7.3 7.3 0 0 0 4.2 0.9 16.2 16.2 0 0 0 4.4-0.7 10.2 10.2 0 0 0 3.6-1.9 5.1 5.1 0 0 0 1.5-2.3 14.7 14.7 0 0 0 0.9-4zm18.4-11.4c-0.1 1.7-0.4 3.2-0.8 5.8l-3.1 17.4a3.2 3.2 0 0 0 1.7 3.6v0.7h-17.9v-4.4a40.2 40.2 0 0 1-8.6 3.6 31.8 31.8 0 0 1-8.5 1.1c-5.8 0-9.1-0.6-11.3-2.6s-3.5-3.4-3.4-6.3a9.6 9.6 0 0 1 2.2-5.1 13.5 13.5 0 0 1 4.7-3.4 28.9 28.9 0 0 1 7.2-2c3.1-0.5 7.5-1 13.4-1.5a15.7 15.7 0 0 0 5.8-1.3c1.3-0.5 1.7-1 1.9-2s-0.2-2.8-2.6-3.3c-6.4-1.2-18.4 0.8-24.6 2.4l3.3-9.1a162.8 162.8 0 0 1 23.9-2c12.7 0 16.8 3.7 16.7 8.4z"/>
+      <path d="m344.6 88.2 3.9-0.4c1.3 0 2.4 0.3 2.5 1.5s-1.3 6-1.6 7.3l-2.7 11.7c-1 4.8-2.2 9.8-3.2 13.8h6.8l3.8-18.6c11.8-12.2 16.3-16.2 19-16.2a2 2 0 0 1 2.2 2.2c0.1 2.1-1.3 7-1.7 8.4l-4 13.5c-0.8 3.1-1.5 5.8-1.4 7.8s1.9 4.3 4.5 4.3c5 0 8.7-5.2 11.8-10.3l-0.9-1.7c-1.3 2-4.2 6.5-6.6 6.5-0.7 0-1.4-0.5-1.4-1.7a20.5 20.5 0 0 1 1-5.5l4.4-15.9c1.1-4.4 1.7-7.2 1.7-8.7s-1.9-4.3-4.5-4.3c-4.5 0-10.5 3.3-23.1 17.8h-0.2l1.6-7.1c0.9-3.9 1.7-7.9 2.5-10.7a114.5 114.5 0 0 1-14.5 4.1zm66.9 0.4c-0.1-2.8-1.5-4.7-4.4-4.7-7 0-14.4 13.7-15.7 19.2 11.4 0 20.4-6.8 20.1-14.5zm1.5 21.5 1.3 0.9c-3.4 6.9-10.3 12.5-18.5 12.5-6.7 0-12.1-4.4-12.4-12.7-0.6-15 13.5-28.9 24.9-28.9 4.9 0 9.5 2.2 9.7 7.5 0.4 11.9-16.3 15.5-27.3 15.7a14.3 14.3 0 0 0-0.4 4.4c0.2 5 3.2 9.1 9.3 9.1s10.7-4.3 13.4-8.5zm-117.9-9.7c0.3 10.9 7.2 19.8 16.2 19.8 17.4 0 24.8-21.4 24.3-35.7-0.4-10.9-7.4-19.8-16.4-19.8-15 0-24.7 21.3-24.1 35.7zm-9.2-0.6c-0.7-18.6 13.9-37.6 35-37.6 14.2 0 23.4 9.5 23.9 23.9 0.7 19.6-12.9 37.6-35 37.6-14.2 0-23.4-9.4-23.9-23.9z"/>
+    </g>
+  </symbol>
+</svg>
+
+<div id="stars"></div>
+<div id="tower">🗼</div>
+
+<!-- ══════════════ SIMULATION DECK ══════════════ -->
+<div class="sticky top-0 z-50 text-white" style="background: linear-gradient(120deg,#0b0f12,#101c24);">
+  <div class="max-w-6xl mx-auto px-4 py-2 flex flex-wrap items-center gap-2">
+    <span class="microlabel text-white/40 mr-1">Simulator</span>
+    <span class="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-emerald-300 mr-1">
+      <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 live-dot"></span> auth stream
+    </span>
+
+    <span class="flex rounded-full border border-white/15 overflow-hidden mr-1" id="sim-city-toggle"></span>
+
+    <button id="btn-home-swipe" onclick="fireHomeSwipe()"
+      class="sim-btn rounded-full px-3 py-1.5 text-[11px] font-bold bg-white/[.08] border border-white/15 hover:bg-white/15">
+      🏠 Home Swipe <span class="text-white/40 font-medium hidden lg:inline">$4.50</span>
+    </button>
+    <button id="btn-ignite" onclick="fireIgnition()"
+      class="sim-btn relative overflow-hidden rounded-full px-3.5 py-1.5 text-[11px] font-bold border border-amber-300/50"
+      style="background: linear-gradient(120deg,#cc2427,#8f181b);">
+      <span class="shimmer-band absolute inset-0 rounded-full"></span>
+      <span class="relative">✈️ First Out-of-Town Swipe <span class="text-amber-100/70 font-medium hidden lg:inline" id="lbl-ignite">$120 · Paris</span></span>
+    </button>
+    <button id="btn-swipe2" onclick="fireProgressSwipe()" disabled
+      class="sim-btn rounded-full px-3 py-1.5 text-[11px] font-bold bg-white/[.08] border border-white/15 hover:bg-white/15">
+      <span id="lbl-swipe2">☕ Café</span> <span class="text-white/40 font-medium hidden lg:inline" id="lbl-swipe2b">$160</span>
+    </button>
+    <button id="btn-swipe3" onclick="fireTierSwipe()" disabled
+      class="sim-btn rounded-full px-3 py-1.5 text-[11px] font-bold bg-white/[.08] border border-white/15 hover:bg-white/15">
+      <span id="lbl-swipe3">🍷 Dinner</span> <span class="text-white/40 font-medium hidden lg:inline" id="lbl-swipe3b">$95</span>
+    </button>
+    <button id="btn-return" onclick="fireReturnSwipe()" disabled
+      class="sim-btn rounded-full px-3 py-1.5 text-[11px] font-bold bg-white/[.08] border border-white/15 hover:bg-white/15">
+      🛬 Fly Home <span class="text-white/40 font-medium hidden lg:inline">$6.20 · IAD</span>
+    </button>
+    <button onclick="location.reload()" class="rounded-full px-2.5 py-1.5 text-[11px] font-bold border border-white/20 hover:bg-white/10">↺</button>
+
+    <p class="basis-full xl:basis-auto xl:ml-auto font-mono text-[10px] text-emerald-300/80 truncate xl:max-w-sm">
+      <span class="text-white/30">▸</span> <span id="event-log">awaiting first event</span>
+    </p>
+  </div>
+</div>
+
+<!-- toast -->
+<div id="toast" class="fixed top-16 right-5 z-[80] w-80 max-w-[90vw] hidden"></div>
+
+<!-- ══════════════ NEW TRIP MODAL · authoring entry ══════════════ -->
+<div id="modal-new" class="fixed inset-0 z-[82] hidden items-center justify-center px-4" style="background: rgba(10,8,5,.55); backdrop-filter: blur(6px);">
+  <div class="srf rounded-3xl w-full max-w-lg p-8 anim-pop relative" style="background: var(--surface);">
+    <button onclick="closeNewTrip()" class="absolute top-5 right-6 text-xl fnt hover:opacity-70">✕</button>
+    <h2 class="display-hero text-4xl">Plan your next <em>Venture</em></h2>
+    <p class="mut text-sm mt-2">Name a city and City Key drafts the line — stations, rewards, and all.</p>
+
+    <div class="mt-6 space-y-4">
+      <div>
+        <p class="microlabel fnt mb-2">Where to?</p>
+        <input id="nt-dest" class="field" placeholder="e.g. Tokyo, Lisbon, Rome" value="Tokyo" />
+        <div class="flex flex-wrap gap-1.5 mt-2">
+          <button onclick="$('nt-dest').value='Tokyo'" class="rounded-full srf2 px-3 py-1 text-xs font-bold hover:opacity-75">🇯🇵 Tokyo</button>
+          <button onclick="$('nt-dest').value='Lisbon'" class="rounded-full srf2 px-3 py-1 text-xs font-bold hover:opacity-75">🇵🇹 Lisbon</button>
+          <button onclick="$('nt-dest').value='Rome'" class="rounded-full srf2 px-3 py-1 text-xs font-bold hover:opacity-75">🇮🇹 Rome</button>
+          <button onclick="$('nt-dest').value='Reykjavik'" class="rounded-full srf2 px-3 py-1 text-xs font-bold hover:opacity-75">🇮🇸 Reykjavik</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><p class="microlabel fnt mb-2">Start</p><input id="nt-start" type="date" class="field" value="2026-09-10" /></div>
+        <div><p class="microlabel fnt mb-2">End</p><input id="nt-end" type="date" class="field" value="2026-09-14" /></div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><p class="microlabel fnt mb-2">Invite a tripmate</p><input id="nt-mate" class="field" placeholder="Name (optional)" /></div>
+        <div><p class="microlabel fnt mb-2">Trip budget</p><input id="nt-budget" type="number" class="field" value="2000" /></div>
+      </div>
+    </div>
+
+    <button onclick="createTrip()" class="mt-7 w-full rounded-full bg-c1blue hover:bg-[#026597] active:bg-[#014e74] text-white text-base font-bold py-3.5 transition-colors">
+      Draw the line →
+    </button>
+    <p class="text-[10px] fnt text-center mt-3">🗝️ City Key auto-provisions reward stations for any destination — no itinerary required.</p>
+  </div>
+</div>
+
+<!-- ══════════════ VELOCITY BLACK · concierge ══════════════ -->
+<button id="vb-btn" onclick="openVB()" class="vb-btn hidden" title="Velocity Black concierge">V·B</button>
+
+<div id="vb-drawer" class="vb-drawer">
+  <div class="px-6 pt-6 pb-4" style="border-bottom: 1px solid rgba(212,175,55,.2);">
+    <div class="flex items-start justify-between">
+      <div>
+        <p class="text-[11px] font-bold vb-gold" style="letter-spacing:.42em;">✦ VELOCITY BLACK</p>
+        <p class="text-[11px] mt-1.5" style="color: rgba(239,230,212,.55);">Concierge · always on · a Capital One company</p>
+      </div>
+      <button onclick="closeVB()" class="text-lg hover:opacity-70" style="color: rgba(239,230,212,.6);">✕</button>
+    </div>
+  </div>
+  <div id="vb-thread" class="flex-1 overflow-y-auto no-scrollbar px-5 py-5 space-y-3"></div>
+  <div id="vb-chips" class="px-5 pb-6 pt-4 flex flex-col gap-2" style="border-top: 1px solid rgba(212,175,55,.2);"></div>
+</div>
+
+<!-- ══════════════ E-TICKET MODAL · QR access ══════════════ -->
+<div id="modal-ticket" class="fixed inset-0 z-[83] hidden items-center justify-center px-4" style="background: rgba(10,8,5,.55); backdrop-filter: blur(6px);">
+  <div class="w-full max-w-sm rounded-3xl overflow-hidden anim-pop shadow-2xl">
+    <div class="p-6 text-white relative" style="background: linear-gradient(140deg,#013d5b,#0276b1);">
+      <button onclick="closeTicket()" class="absolute top-4 right-5 text-lg text-white/70 hover:text-white">✕</button>
+      <p class="microlabel text-white/60">Capital One Travel · E-Ticket</p>
+      <p id="tk-title" class="font-display text-3xl font-light mt-2 leading-tight pr-6">—</p>
+      <p id="tk-sub" class="text-white/70 text-sm mt-1.5 font-medium">—</p>
+    </div>
+    <div class="bg-white px-6 pt-6 pb-5 text-center" style="color:#171310;">
+      <canvas id="tk-qr" width="200" height="200" class="mx-auto rounded-lg" style="image-rendering: pixelated; border: 1px solid #eee;"></canvas>
+      <p id="tk-code" class="font-mono text-sm font-bold tracking-[.2em] mt-4" style="color:#013d5b;">—</p>
+      <p class="text-[10px] font-bold uppercase tracking-[.25em] mt-1" style="color:#a89d8c;">scan at entry · valid for 2 guests</p>
+      <div class="flex items-center justify-between mt-5 pt-4 text-xs font-bold" style="border-top: 2px dashed #e3dac8;">
+        <span id="tk-time" style="color:#7d7365;">—</span>
+        <span id="tk-price" style="color:#5c8f1d;">—</span>
+        <span style="color:#7d7365;">⭐ 5x miles</span>
+      </div>
+      <button onclick="toast('📲','Added to Wallet','Your ticket is on your lock screen when you arrive')"
+        class="mt-4 w-full rounded-full text-white text-sm font-bold py-3 hover:brightness-110 transition" style="background:#10131c;">
+         Add to Wallet
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ IGNITION SPLASH ══════════════ -->
+<div id="splash" class="fixed inset-0 z-[85] hidden flex-col items-center justify-center text-center px-8"
+     style="background: linear-gradient(165deg,rgba(3,7,12,.98) 0%, rgba(1,61,91,.97) 55%, rgba(2,118,177,.95) 120%);">
+  <div class="anim-key text-8xl mb-8 drop-shadow-2xl">🗝️</div>
+  <p class="anim-pop microlabel text-key mb-4" style="animation-delay:.25s" id="splash-zip">out-of-market swipe</p>
+  <h2 class="anim-pop text-white text-5xl sm:text-7xl display-hero" style="animation-delay:.4s">
+    the city is <em>yours</em>
+  </h2>
+  <p class="anim-pop text-white/85 text-lg mt-6 font-sans" style="animation-delay:.6s" id="splash-welcome">City Key activated</p>
+  <p class="anim-pop text-white/50 text-sm mt-1.5 font-sans" style="animation-delay:.7s">Every swipe now moves you down the line. No GPS. No check-ins.</p>
+  <div class="anim-pop mt-9 rounded-2xl bg-white/10 backdrop-blur border border-white/15 px-6 py-4 text-left text-white text-sm" style="animation-delay:.85s">
+    <p class="font-bold" id="splash-txn">—</p>
+    <p class="text-white/60 font-mono text-xs mt-1" id="splash-meta">—</p>
+  </div>
+</div>
+
+<!-- ══════════════ APP SHELL ══════════════ -->
+<div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pb-24">
+
+  <header class="flex flex-wrap items-center justify-between gap-4 pt-6">
+    <div class="flex items-center gap-4">
+      <svg class="c1-use h-9 w-auto -my-2" viewBox="0 0 418 150" role="img" aria-label="Capital One"><use href="#c1logo"/></svg>
+      <span class="h-5 w-px" style="background: var(--border);"></span>
+      <p class="microlabel mut">Venture&nbsp;Key</p>
+    </div>
+
+    <nav class="flex items-center gap-5 order-3 sm:order-none w-full sm:w-auto justify-center" id="stepper">
+      <button class="step now flex items-center gap-2" data-step="home" onclick="go('home')">
+        <span class="step-dot"></span><span class="step-name microlabel fnt">Home</span>
+      </button>
+      <button class="step flex items-center gap-2" data-step="plan" onclick="go('plan')">
+        <span class="step-dot"></span><span class="step-name microlabel fnt">Plan</span>
+      </button>
+      <button class="step flex items-center gap-2" data-step="live" onclick="go('live')">
+        <span class="step-dot"></span><span class="step-name microlabel fnt">Live</span>
+      </button>
+      <button class="step flex items-center gap-2" data-step="wrap" onclick="go('wrap')">
+        <span class="step-dot"></span><span class="step-name microlabel fnt">Wrap</span>
+      </button>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <button id="nav-account" onclick="go('account')"
+        class="flex items-center gap-2 rounded-full px-4 py-1.5 srf text-[11px] font-bold hover:opacity-80 transition-opacity">
+        💳 <span class="microlabel mut" style="letter-spacing:.18em;">Account</span>
+      </button>
+      <div class="flex items-center gap-2 rounded-full px-4 py-1.5 srf">
+        <span class="microlabel mut" id="mode-text">At home · VA</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ════════ SCREEN · HOME ════════ -->
+  <section id="screen-home" class="screen on mt-12 sm:mt-16">
+    <div class="grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
+      <div>
+        <p class="microlabel acc mb-4">Good evening, Bharath</p>
+        <h1 class="display-hero text-6xl sm:text-8xl">Where to <em>next?</em></h1>
+        <p class="mut text-lg mt-6 max-w-md leading-relaxed">
+          Your card already knows how to travel. Plan the trip here — then let your first swipe in the city unlock the rest.
+        </p>
+        <div class="mt-8 flex flex-wrap items-center gap-3" id="home-trips"></div>
+        <button onclick="openNewTrip()" class="mt-4 rounded-full bg-c1blue hover:bg-[#026597] active:bg-[#014e74] text-white text-sm font-bold px-7 py-3.5 transition-colors">
+          Plan your next Venture →
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div class="flex items-center justify-between px-1">
+          <p class="microlabel fnt">Your wallet · 4 accounts</p>
+          <p class="text-[10px] fnt font-bold">$32,824.58 in deposits</p>
+        </div>
+        <div id="wallet"></div>
+
+        <div class="srf rounded-2xl px-4 py-3.5 flex items-center gap-3">
+          <span class="text-lg">🗝️</span>
+          <p class="text-sm font-bold mut flex-1" id="home-ck">City Key · dormant — wakes when you travel</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ SCREEN · ACCOUNT ════════ -->
+  <section id="screen-account" class="screen mt-12 sm:mt-16">
+    <div class="flex items-end justify-between flex-wrap gap-4">
+      <div>
+        <p class="microlabel acc mb-3">Account servicing</p>
+        <h1 class="display-hero text-5xl sm:text-7xl">Venture X <em>····4907</em></h1>
+      </div>
+      <button onclick="go('home')" class="text-sm font-bold mut hover:opacity-70 pb-2">← Back to home</button>
+    </div>
+
+    <div id="acct-switch" class="mt-6 flex flex-wrap gap-2"></div>
+
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="srf rounded-2xl p-5">
+        <p class="microlabel fnt">Current balance</p>
+        <p class="text-3xl font-bold mt-1.5" style="font-variant-numeric:tabular-nums;" id="acct-balance">$1,284.09</p>
+        <p class="text-[11px] mut font-semibold mt-1">Payment due Aug 3 · min $35</p>
+      </div>
+      <div class="srf rounded-2xl p-5">
+        <p class="microlabel fnt">Available credit</p>
+        <p class="text-3xl font-bold mt-1.5" style="font-variant-numeric:tabular-nums;" id="acct-credit">$28,715</p>
+        <p class="text-[11px] mut font-semibold mt-1">of $30,000 limit</p>
+      </div>
+      <div class="srf rounded-2xl p-5">
+        <p class="microlabel fnt">Rewards miles</p>
+        <p class="text-3xl font-bold mt-1.5 acc" style="font-variant-numeric:tabular-nums;" id="acct-miles">86,420</p>
+        <p class="text-[11px] mut font-semibold mt-1">2x on every swipe</p>
+      </div>
+      <div class="srf rounded-2xl p-5">
+        <p class="microlabel fnt">Tagged to trips</p>
+        <p class="text-3xl font-bold mt-1.5" style="font-variant-numeric:tabular-nums;" id="acct-tagged">$0</p>
+        <p class="text-[11px] mut font-semibold mt-1" id="acct-tagged-note">0 transactions</p>
+      </div>
+    </div>
+
+    <div class="mt-5 flex flex-wrap gap-2.5">
+      <button onclick="toast('💸','Payment scheduled','$1,284.09 from Checking ···2201 on Aug 1')" class="rounded-full bg-c1blue hover:bg-[#026597] text-white text-sm font-bold px-5 py-2.5 transition-colors">Make a payment</button>
+      <button onclick="toast('🔒','Card locked','Venture X ····4907 is locked. Tap again to unlock.')" class="rounded-full srf text-sm font-bold px-5 py-2.5 hover:opacity-80 transition-opacity">Lock card</button>
+      <button onclick="toast('📄','Statements','June statement ready — $1,911.30, paid in full')" class="rounded-full srf text-sm font-bold px-5 py-2.5 hover:opacity-80 transition-opacity">Statements</button>
+      <button onclick="toast('🎁','Rewards','86,420 miles ≈ $864 in travel via Capital One Travel')" class="rounded-full srf text-sm font-bold px-5 py-2.5 hover:opacity-80 transition-opacity">Redeem miles</button>
+    </div>
+
+    <div class="mt-10 max-w-3xl">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-xl font-bold">Transactions</h2>
+        <p class="microlabel fnt">tap a transaction to inspect &amp; tag</p>
+      </div>
+      <div class="srf rounded-3xl overflow-hidden" id="txn-list"></div>
+      <p class="text-[11px] fnt mt-3 leading-relaxed">
+        🗝️ Transactions made in-market during a trip are <b class="mut">auto-tagged by City Key</b>.
+        Home-market purchases for a trip — flights, gear, show tickets — can be tagged by hand to any plan.
+      </p>
+    </div>
+  </section>
+
+  <!-- ════════ SCREEN · ACCOUNT DETAIL (deposits & Quicksilver) ════════ -->
+  <section id="screen-acct2" class="screen mt-12 sm:mt-16"><div id="acct2-body"></div></section>
+
+  <!-- ════════ SCREEN · PLAN (Act I · paper) ════════ -->
+  <section id="screen-plan" class="screen mt-12 sm:mt-16">
+    <div class="flex flex-wrap items-center gap-2 mb-8" id="trip-switch"></div>
+
+    <div class="grid lg:grid-cols-[1fr_320px] gap-10 items-end">
+      <div>
+        <p class="microlabel acc mb-3" id="plan-kicker">Jul 12 – 18 · with Priya</p>
+        <h1 class="display-hero text-6xl sm:text-8xl" id="plan-title">Paris, <em>drawn.</em></h1>
+        <p class="mut text-base sm:text-lg mt-5 max-w-xl leading-relaxed" id="plan-sub"></p>
+      </div>
+      <aside class="srf rounded-2xl p-5">
+        <p class="microlabel fnt">Trip vitals</p>
+        <div class="mt-3 space-y-2.5 text-sm">
+          <div class="flex justify-between"><span class="mut">Destination</span><span class="font-bold" id="rail-dest">Paris 🇫🇷</span></div>
+          <div class="flex justify-between items-center"><span class="mut">Tripmates</span><span class="flex items-center gap-1" id="rail-mates"></span></div>
+          <div class="flex justify-between"><span class="mut">Booked via C1 Travel</span><span class="font-bold" id="rail-booked">$0 · 0 stops</span></div>
+          <div class="flex justify-between"><span class="mut">Trip ledger (tagged)</span><span class="font-bold" id="rail-tagged">$0 · 0 txns</span></div>
+        </div>
+        <div id="rail-mate-form" class="hidden mt-3 flex gap-2">
+          <input id="rail-mate-name" class="field" style="padding:6px 12px; font-size:12px;" placeholder="Tripmate name" />
+          <button onclick="addMate()" class="rounded-full bg-c1blue text-white text-xs font-bold px-4 hover:bg-[#026597]">Add</button>
+        </div>
+        <div class="mt-4 rounded-xl srf2 px-3.5 py-3 flex items-center gap-2.5">
+          <span class="text-lg grayscale opacity-60">🗝️</span>
+          <p class="text-[11px] mut leading-snug"><b class="txt">City Key rides along.</b> It wakes on your first swipe in the city — plan or no plan.</p>
+        </div>
+      </aside>
+    </div>
+
+    <div id="plan-body" class="mt-10"><!-- rendered per trip --></div>
+  </section>
+
+  <!-- ════════ SCREEN · LIVE (Act II · midnight) ════════ -->
+  <section id="screen-live" class="screen mt-12 sm:mt-16">
+    <div class="grid lg:grid-cols-[1fr_320px] gap-10 items-end">
+      <div>
+        <p class="microlabel acc mb-3" id="live-kicker">Awaiting ignition</p>
+        <h1 class="display-hero text-6xl sm:text-8xl" id="live-hero">Paris, <em>asleep.</em></h1>
+        <p class="mut text-base sm:text-lg mt-5 max-w-xl leading-relaxed" id="live-sub">
+          The line is dark. Your first out-of-market swipe lights it — straight off the card auth stream.
+        </p>
+      </div>
+
+      <aside id="rail-night" class="hidden srf rounded-2xl p-5">
+        <p class="microlabel acc flex items-center gap-2">
+          <span class="h-1.5 w-1.5 rounded-full bg-c1red live-dot"></span> <span id="rail-live-city">City Key · Live</span>
+        </p>
+        <p class="microlabel fnt mt-4">Destination spend</p>
+        <p class="text-5xl font-light tracking-tight mt-1 font-display" style="font-variant-numeric: tabular-nums;" id="rail-spend">$0</p>
+        <div class="mt-4">
+          <div class="h-1.5 rounded-full srf2 overflow-hidden">
+            <div id="rail-bar" class="h-full rounded-full" style="width:0%; background:linear-gradient(90deg,#37d6ea,#9fd356); transition: width 1.2s cubic-bezier(.22,1,.36,1);"></div>
+          </div>
+          <p class="text-[11px] mut mt-2 font-semibold" id="rail-next">—</p>
+        </div>
+        <p class="microlabel fnt mt-5 mb-2">Partner offers on the line</p>
+        <div class="flex flex-wrap gap-1.5" id="rail-partners"></div>
+        <div id="rail-alone" class="hidden mt-4"></div>
+        <p class="text-[10px] fnt mt-4 leading-relaxed">Merchant-funded rewards, recognized in real time from the auth stream — and auto-tagged to your trip ledger.</p>
+      </aside>
+    </div>
+
+    <div class="mt-10">
+      <div id="live-dormant" class="srf rounded-3xl px-8 py-16 text-center max-w-2xl">
+        <p class="text-5xl grayscale opacity-50">🗝️</p>
+        <p class="text-xl font-bold mt-5">The line is dark.</p>
+        <p class="mut text-sm mt-2 max-w-sm mx-auto leading-relaxed">
+          City Key ignites on your <b class="txt">first out-of-market card swipe</b>. No itinerary needed. No GPS.
+          Pick a city in the simulator and fire “✈️ First Out-of-Town Swipe”.
+        </p>
+      </div>
+
+      <div id="live-line-wrap" class="hidden max-w-2xl">
+        <div id="live-line" class="relative">
+          <div class="track"></div>
+          <div class="fill" id="line-fill"></div>
+          <div id="line-rows"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ SCREEN · WRAP (Act III · dawn) ════════ -->
+  <section id="screen-wrap" class="screen mt-12 sm:mt-16">
+    <div class="max-w-3xl">
+      <p class="microlabel acc mb-3" id="wrap-kicker">Trip settled</p>
+      <h1 class="display-hero text-6xl sm:text-8xl" id="wrap-title">Paris, <em>wrapped.</em></h1>
+      <p class="mut text-base sm:text-lg mt-5 max-w-xl leading-relaxed">
+        Wheels down in Virginia. Here's what your card did while you weren't looking at it.
+      </p>
+    </div>
+
+    <div class="mt-10 max-w-3xl rounded-3xl overflow-hidden shadow-2xl anim-rise">
+      <div class="p-8 sm:p-10 text-white relative" style="background: linear-gradient(150deg,#1b1030 0%, #013d5b 45%, #d96d2a 130%);">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p class="microlabel text-white/50">Venture Key · Trip Wrapped</p>
+            <p class="font-display text-6xl sm:text-7xl font-light mt-2" id="w-airports">CDG <span class="text-white/40 text-4xl align-middle">→</span> IAD</p>
+            <p class="text-white/70 text-sm mt-2 font-medium" id="w-sub">Paris, France</p>
+          </div>
+          <div class="text-right">
+            <p class="microlabel text-white/50">Wallet share</p>
+            <p class="font-display text-6xl font-light text-key" id="w-share">0%</p>
+            <p class="text-[10px] text-white/50 font-bold uppercase tracking-widest mt-1">of trip on your Venture card</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-5 mt-10">
+          <div>
+            <p class="microlabel text-white/45">Trip ledger</p>
+            <p class="text-3xl font-bold mt-1.5" style="font-variant-numeric:tabular-nums;" id="w-spend">$0</p>
+          </div>
+          <div>
+            <p class="microlabel text-white/45">Miles earned</p>
+            <p class="text-3xl font-bold mt-1.5 text-key" style="font-variant-numeric:tabular-nums;" id="w-miles">0</p>
+          </div>
+          <div>
+            <p class="microlabel text-white/45">Stations unlocked</p>
+            <p class="text-3xl font-bold mt-1.5" id="w-stations">0<span class="text-white/40 text-xl">/3</span></p>
+          </div>
+          <div>
+            <p class="microlabel text-white/45">Rewards claimed</p>
+            <p class="text-3xl font-bold mt-1.5 text-keyg" id="w-claimed">$0</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="perf px-8 sm:px-10 py-6 text-white flex flex-wrap items-center justify-between gap-4" style="background:#10131c;">
+        <div class="text-sm">
+          <p class="font-bold" id="w-top">—</p>
+          <p class="text-white/50 text-xs mt-0.5" id="w-fact">—</p>
+        </div>
+        <div class="barcode h-10 w-40 text-white/70"></div>
+      </div>
+    </div>
+
+    <div class="mt-8 flex flex-wrap items-center gap-3">
+      <button onclick="toast('📤','Wrapped shared','Your trip card is on its way to your tripmate','brand')"
+        class="rounded-full bg-c1blue hover:bg-[#026597] text-white text-sm font-bold px-6 py-3 transition-colors">Share your Wrapped</button>
+      <button onclick="openNewTrip()" class="rounded-full srf text-sm font-bold px-6 py-3 hover:opacity-80 transition-opacity">Plan your next Venture →</button>
+      <button onclick="location.reload()" class="text-sm font-bold mut hover:opacity-70 px-2">↺ Restart demo</button>
+    </div>
+  </section>
+</div>
+
+<footer class="relative z-10 text-center pb-8 text-[11px] fnt">
+  Project Venture Key · end-to-end concept prototype for Capital One · hardcoded state transitions · no real accounts or merchants
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/core.js"></script>
+<script src="js/account.js"></script>
+<script src="js/planner.js"></script>
+<script src="js/citykey.js"></script>
+<script src="js/velocity.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
