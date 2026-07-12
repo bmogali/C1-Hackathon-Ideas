@@ -1,0 +1,456 @@
+{
+  "source": "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/PlanView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Nothing planned yet — add a stop, ask the concierge, or just go. City Key works either way.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 101
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld traveler%@ · %@ · %@ miles",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 148
+        }
+      },
+      {
+        "comment": "",
+        "key": "  →  ",
+        "location": {
+          "startingColumn": 17,
+          "startingLine": 204
+        }
+      },
+      {
+        "comment": "",
+        "key": "Getting there",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 158
+        }
+      },
+      {
+        "comment": "",
+        "key": "Fares are trending up %lld%% for these dates — booking today locks the price.",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 176
+        }
+      },
+      {
+        "comment": "",
+        "key": "Fares tend to ease %lld%% before departure — freeze today's rate while you wait.",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 177
+        }
+      },
+      {
+        "comment": "",
+        "key": "Freeze · $8",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 191
+        }
+      },
+      {
+        "comment": "",
+        "key": "Book flight",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 194
+        }
+      },
+      {
+        "comment": "",
+        "key": "per traveler · 5x miles",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 186
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld nights · 10x miles · $300 credit applied",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 220
+        }
+      },
+      {
+        "comment": "",
+        "key": "Premier Collection",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 223
+        }
+      },
+      {
+        "comment": "",
+        "key": "Find hotel",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 244
+        }
+      },
+      {
+        "comment": "",
+        "key": "Where are you staying?",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 238
+        }
+      },
+      {
+        "comment": "",
+        "key": "Booking arms City Key before you land.",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 240
+        }
+      },
+      {
+        "comment": "",
+        "key": "Shall we handle ",
+        "location": {
+          "startingColumn": 19,
+          "startingLine": 253
+        }
+      },
+      {
+        "comment": "",
+        "key": "getting there?",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 254
+        }
+      },
+      {
+        "comment": "",
+        "key": "Flights, a hotel, price protection, and your $300 travel credit — booked right here. City Key arms itself for %@ the moment you confirm.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 257
+        }
+      },
+      {
+        "comment": "",
+        "key": "Yes, let's book",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 261
+        }
+      },
+      {
+        "comment": "",
+        "key": "I'll handle it",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 263
+        }
+      },
+      {
+        "comment": "",
+        "key": "Booking handled elsewhere for this trip.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 273
+        }
+      },
+      {
+        "comment": "",
+        "key": "Actually, book",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 276
+        }
+      },
+      {
+        "comment": "",
+        "key": "Buy on %@ · Pay with Paze",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 327
+        }
+      },
+      {
+        "comment": "",
+        "key": "Top offer · matched to this trip",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 292
+        }
+      },
+      {
+        "comment": "",
+        "key": "on %@ · %@",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 311
+        }
+      },
+      {
+        "comment": "",
+        "key": "on %@",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 345
+        }
+      },
+      {
+        "comment": "",
+        "key": "Buy · %@",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 347
+        }
+      },
+      {
+        "comment": "",
+        "key": "Watching %lld ticket%@ on this plan",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 394
+        }
+      },
+      {
+        "comment": "",
+        "key": "Re-checked every 6 hours across 30,000+ sellers",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 396
+        }
+      },
+      {
+        "comment": "",
+        "key": "Apply",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 411
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ · Velocity Black",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 452
+        }
+      },
+      {
+        "comment": "",
+        "key": "Paid with Paze · via %@",
+        "location": {
+          "startingColumn": 47,
+          "startingLine": 511
+        }
+      },
+      {
+        "comment": "",
+        "key": "Booked · 5x miles earned",
+        "location": {
+          "startingColumn": 95,
+          "startingLine": 511
+        }
+      },
+      {
+        "comment": "",
+        "key": "−%@",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 486
+        }
+      },
+      {
+        "comment": "",
+        "key": "Book · C1 Travel",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 496
+        }
+      },
+      {
+        "comment": "",
+        "key": "Pay with Paze",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 502
+        }
+      },
+      {
+        "comment": "",
+        "key": "Stay in ",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 540
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@.",
+        "location": {
+          "startingColumn": 33,
+          "startingLine": 541
+        }
+      },
+      {
+        "comment": "",
+        "key": "Capital One Travel · 10x miles · $300 annual travel credit auto-applies",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 544
+        }
+      },
+      {
+        "comment": "",
+        "key": "Premier Collection",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 579
+        }
+      },
+      {
+        "comment": "",
+        "key": "Book",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 602
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ · %@",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 594
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@/night · %@ after credit",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 596
+        }
+      },
+      {
+        "comment": "",
+        "key": "New ",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 628
+        }
+      },
+      {
+        "comment": "",
+        "key": "stop.",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 628
+        }
+      },
+      {
+        "comment": "",
+        "key": "What's the plan? e.g. Tsukiji fish market",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 632
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add stop",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 647
+        }
+      },
+      {
+        "comment": "",
+        "key": "12:00",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 637
+        }
+      },
+      {
+        "comment": "",
+        "key": "Price $ (optional → bookable)",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 642
+        }
+      },
+      {
+        "comment": "",
+        "key": "Plan your next ",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 672
+        }
+      },
+      {
+        "comment": "",
+        "key": "Venture.",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 672
+        }
+      },
+      {
+        "comment": "",
+        "key": "Name a city and City Key drafts the line — stations, rewards, and all.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 676
+        }
+      },
+      {
+        "comment": "",
+        "key": "City Key auto-provisions reward stations for any destination — no itinerary required.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 700
+        }
+      },
+      {
+        "comment": "",
+        "key": "Where to? e.g. Tokyo, Lisbon, Rome",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 679
+        }
+      },
+      {
+        "comment": "",
+        "key": "Tripmate (optional)",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 683
+        }
+      },
+      {
+        "comment": "",
+        "key": "Nights: %lld",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 687
+        }
+      },
+      {
+        "comment": "",
+        "key": "Draw the line",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 693
+        }
+      }
+    ]
+  },
+  "version": 1
+}

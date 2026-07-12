@@ -1,5 +1,7 @@
 /* ═══ VENTURE KEY · Venture Planner — authoring, booking, Shopping, Price Watch, tickets ═══ */
 
+let hotelSearchOpen = null; // tripKey whose hotel results panel is expanded
+
 function metaChips(stop) {
   const cs = CAT_STYLE[stop.cat] || CAT_STYLE.walk;
   let h = `<span class="chip" style="color:var(--accent); background: color-mix(in srgb, var(--accent) 13%, transparent);">🕒 ${esc(stop.time)}</span>`;
@@ -89,7 +91,7 @@ function renderShopping(T, S) {
         <div class="flex flex-wrap items-start gap-5">
           <span class="h-16 w-16 rounded-2xl srf flex items-center justify-center text-3xl shrink-0">${R.hero.icon}</span>
           <div class="flex-1 min-w-[220px]">
-            <p class="text-xl font-bold">${R.hero.name} <span class="mut text-sm font-medium">× ${travelers} traveler${travelers > 1 ? 's' : ''}</span></p>
+            <p class="text-xl font-bold">${R.hero.name} <span class="mut text-sm font-medium">× ${travelers} traveler${travelers > 1 ? 's' : ''} · on ${R.hero.retailer}</span></p>
             <ul class="mt-2 space-y-1.5">
               ${why.map((w) => `<li class="text-[13px] mut leading-snug flex gap-2"><span class="acc font-bold shrink-0">·</span>${esc(w)}</li>`).join('')}
             </ul>
@@ -99,7 +101,7 @@ function renderShopping(T, S) {
             <p class="text-[11px] font-bold" style="color:#5c8f1d;">${R.hero.back}% back in credits</p>
             ${S.bought.has('hero')
               ? '<p class="mt-2.5 text-sm font-bold" style="color:#79a83e;">In your trip kit ✓</p>'
-              : `<button onclick="buyRec('hero')" class="mt-2.5 rounded-full bg-c1blue hover:bg-[#026597] text-white text-sm font-bold px-5 py-2.5 transition-colors">Add to trip kit</button>`}
+              : `<button onclick="buyRec('hero')" class="mt-2.5 rounded-full bg-c1blue hover:bg-[#026597] text-white text-sm font-bold px-5 py-2.5 transition-colors">Buy on ${R.hero.retailer} · Pay with Paze</button>`}
           </div>
         </div>
       </div>
@@ -114,7 +116,7 @@ function renderShopping(T, S) {
                 <span class="text-xl">${r.icon}</span>
                 ${S.bought.has(String(i))
                   ? '<span class="text-[11px] font-bold" style="color:#79a83e;">Added ✓</span>'
-                  : `<button onclick="buyRec(${i})" class="rounded-full bg-c1blue text-white text-[11px] font-bold px-3 py-1 hover:bg-[#026597]">Add · $${r.price}</button>`}
+                  : `<button onclick="buyRec(${i})" class="rounded-full bg-c1blue text-white text-[11px] font-bold px-3 py-1 hover:bg-[#026597]">Buy on ${r.retailer} · Paze</button>`}
               </div>
               <p class="text-sm font-bold mt-2 leading-tight">${r.name}</p>
               <p class="text-[11px] mut mt-0.5">${r.why} · <b style="color:#5c8f1d;">${r.back}% back</b></p>
@@ -132,13 +134,25 @@ function renderPriceWatch(T, S) {
     if (stop.price && stop.price >= 20 && !stop.dropApplied && (stop.status === 'idea' || stop.status === 'book')) drops.push({ di, si, stop });
   }));
   const totalPossible = drops.reduce((a, d) => a + dropFor(d.stop).save, 0);
+  const protection = S.hotel && S.hotel.dropDetected ? `
+    <div class="rounded-xl px-4 py-3 mb-3 flex flex-wrap items-center gap-3" style="background: color-mix(in srgb, var(--accent) 8%, transparent); border:1px solid color-mix(in srgb, var(--accent) 25%, transparent);">
+      <span class="text-lg">🛡️</span>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-bold">${esc(S.hotel.name)} — rate dropped ${fmt0(S.hotel.dropAmt)} after booking</p>
+        <p class="text-[11px] mut mt-0.5">${S.hotel.protectionClaimed ? 'Credit posted to your account ✓' : 'Price drop protection filed · credit posts in 3–5 days'}</p>
+      </div>
+      ${S.hotel.protectionClaimed
+        ? `<span class="text-xs font-bold" style="color:#5c8f1d;">Claimed ✓</span>`
+        : `<button onclick="claimProtection('${T.key}')" class="rounded-full text-white text-xs font-bold px-4 py-2 hover:brightness-110" style="background:#10131c;">Claim</button>`}
+    </div>` : '';
   return `
-    <p class="microlabel acc mt-10 mb-3">📉 Price Watch · Capital One Shopping</p>
+    <p class="microlabel acc mt-10 mb-3">📉 Price Watch · Capital One Travel &amp; Shopping</p>
     <div class="srf rounded-2xl p-5 max-w-2xl">
+      ${protection}
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div>
           <p class="font-bold">${drops.length ? `Watching ${drops.length} ticket${drops.length > 1 ? 's' : ''} on this plan` : 'Every ticket on this plan is at its best price'}</p>
-          <p class="text-[11px] mut mt-0.5">Re-checked every 6 hours across 30,000+ sellers${drops.length ? ` — apply a drop and your plan updates instantly` : ` — we'll keep watching`}.</p>
+          <p class="text-[11px] mut mt-0.5">Hopper-grade prediction before you book · drop protection after — re-checked every 6 hours across 30,000+ sellers.</p>
         </div>
         ${S.saved ? `<span class="chip" style="color:#5c8f1d; background: rgba(159,211,86,.18);">saved ${fmt0(S.saved)} so far</span>`
           : drops.length ? `<span class="chip" style="color:var(--accent); background: color-mix(in srgb, var(--accent) 13%, transparent);">${fmt0(totalPossible)} on the table</span>` : `<span class="chip" style="color:#5c8f1d; background: rgba(159,211,86,.18);">✓ all optimal</span>`}
@@ -156,6 +170,250 @@ function renderPriceWatch(T, S) {
     </div>`;
 }
 
+/* ═══════════ CAPITAL ONE TRAVEL · flights & hotels ═══════════
+   See c1-travel-hotels-spec.md. Booking a hotel or flight here is the
+   trigger that arms City Key (§2 of the spec) before a single swipe happens.
+   We ask before we build — customers who don't want booking help never
+   see the widget clutter. */
+function renderGettingThere(T, S) {
+  const hasBookings = !!(S.hotel || S.flight);
+
+  if (!hasBookings && S.travelIntent === null) {
+    return `
+    <div class="travel-shell travel-ask p-8 sm:p-12 mb-10 text-center">
+      <p class="microlabel acc mb-4">Travel &amp; Stay · Capital One Travel</p>
+      <p class="font-display text-3xl sm:text-5xl font-light max-w-xl mx-auto leading-[1.05]">Shall we handle getting <em>there?</em></p>
+      <p class="mut text-sm sm:text-base mt-4 max-w-md mx-auto leading-relaxed">
+        Flights, a hotel, price protection, and your $300 annual travel credit — booked right here.
+        City Key arms itself for ${esc(T.city)} the moment you confirm.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <button onclick="setTravelIntent('${T.key}','yes')" class="btn-travel-primary">Yes, let's book →</button>
+        <button onclick="setTravelIntent('${T.key}','skip')" class="btn-travel-ghost">I'll handle it myself</button>
+      </div>
+    </div>`;
+  }
+
+  if (!hasBookings && S.travelIntent === 'skip') {
+    return `
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-10 px-1">
+      <p class="text-xs fnt">✈️ Flights and hotel aren't being booked here for this trip.</p>
+      <button onclick="setTravelIntent('${T.key}','yes')" class="text-xs font-bold acc hover:opacity-70">Actually, let's book →</button>
+    </div>`;
+  }
+
+  const flightBooked = !!(S.flight && S.flight.total);
+  const fullyBooked = flightBooked && !!S.hotel;
+
+  if (fullyBooked && !S.travelExpanded) return renderTravelSummary(T, S);
+
+  const f = flightFor(T);
+  const pred = f.prediction.advice === 'book_now'
+    ? { icon: '📈', text: `Fares are trending up ${f.prediction.pct}% for these dates — booking today locks the price.` }
+    : { icon: '🧊', text: `Fares tend to ease before departure — freeze today's rate while you wait.` };
+  const [origin, dest] = f.route.split(' → ');
+
+  const flightCard = flightBooked ? `
+    <div class="travel-card p-6 sm:p-7" style="border-color: rgba(159,211,86,.5);">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <p class="microlabel fnt mb-2">Getting there · booked</p>
+          <p class="font-display text-3xl sm:text-4xl font-light">${esc(origin)} <span class="acc">→</span> ${esc(dest)}</p>
+        </div>
+        <span class="text-[10px] font-bold uppercase tracking-widest rounded-full px-3 py-1.5 shrink-0" style="background: rgba(159,211,86,.14); color:#5c8f1d;">Confirmed ✓</span>
+      </div>
+      <div class="grid grid-cols-3 gap-3 mt-5">
+        <div class="travel-stat"><p class="microlabel fnt">Travelers</p><p class="text-lg font-bold mt-1">${S.flight.travelers}</p></div>
+        <div class="travel-stat"><p class="microlabel fnt">Total fare</p><p class="text-lg font-bold mt-1">${fmt0(S.flight.total)}</p></div>
+        <div class="travel-stat"><p class="microlabel fnt">Miles earned</p><p class="text-lg font-bold mt-1 acc">${Math.round(S.flight.total * 5).toLocaleString()}</p></div>
+      </div>
+    </div>` : `
+    <div class="travel-card p-6 sm:p-7">
+      <p class="microlabel fnt mb-2">Getting there</p>
+      <p class="font-display text-3xl sm:text-4xl font-light">${esc(origin)} <span class="acc">→</span> ${esc(dest)}</p>
+      <div class="insight-row mt-5">
+        <span class="insight-dot" style="background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent);">${pred.icon}</span>
+        <div class="min-w-0 pt-1.5">
+          <p class="text-sm font-semibold leading-snug">${pred.text}</p>
+          <p class="text-[11px] mut mt-1.5">⭐ 5x miles on this fare · Capital One Travel price prediction</p>
+        </div>
+      </div>
+      ${S.flight && S.flight.frozen ? `<p class="text-[11px] mt-3 font-semibold acc">🧊 Frozen at ${fmt0(S.flight.frozenPrice)} · 6 days left to book</p>` : ''}
+      <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+        <p class="text-2xl font-bold" style="font-variant-numeric:tabular-nums;">${fmt0(f.price)}<span class="text-sm mut font-medium"> · per traveler</span></p>
+        <div class="flex flex-wrap gap-2.5">
+          <button onclick="freezeFlight('${T.key}')" class="btn-travel-ghost">Freeze rate · $8</button>
+          <button onclick="bookFlight('${T.key}')" class="btn-travel-primary">Book flight</button>
+        </div>
+      </div>
+    </div>`;
+
+  const hotelCard = S.hotel ? `
+    <div class="travel-card p-6 sm:p-7 mt-4" style="border-color: rgba(159,211,86,.5);">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <p class="microlabel fnt mb-2">Staying at</p>
+          <p class="font-display text-2xl sm:text-3xl font-light">${esc(S.hotel.name)}</p>
+          ${S.hotel.collection === 'premier' ? `<p class="text-xs font-bold mt-1.5" style="color:#b8860b;">◆ Premier Collection</p>` : ''}
+        </div>
+        <span class="text-[10px] font-bold uppercase tracking-widest rounded-full px-3 py-1.5 shrink-0" style="background: rgba(159,211,86,.14); color:#5c8f1d;">Armed ✓</span>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
+        <div class="travel-stat"><p class="microlabel fnt">Nights</p><p class="text-lg font-bold mt-1">${S.hotel.nights}</p></div>
+        <div class="travel-stat"><p class="microlabel fnt">Total</p><p class="text-lg font-bold mt-1">${fmt0(S.hotel.total)}</p></div>
+        <div class="travel-stat"><p class="microlabel fnt">Travel credit</p><p class="text-lg font-bold mt-1" style="color:#5c8f1d;">−${fmt0(S.hotel.creditApplied)}</p></div>
+        <div class="travel-stat"><p class="microlabel fnt">Net · miles</p><p class="text-lg font-bold mt-1">${fmt0(S.hotel.net)} <span class="acc">· ${S.hotel.miles.toLocaleString()}mi</span></p></div>
+      </div>
+    </div>` : `
+    <div class="travel-card p-6 sm:p-7 mt-4">
+      <div class="flex flex-wrap items-center justify-between gap-5">
+        <div class="min-w-[220px]">
+          <p class="microlabel fnt mb-2">Where you'll stay</p>
+          <p class="font-display text-2xl sm:text-3xl font-light">Let's find your <em class="acc" style="font-style:italic;">home base.</em></p>
+          <p class="text-sm mut mt-2 max-w-sm leading-relaxed">Booking now arms City Key for ${esc(T.city)} before you land — Base Camp appears on your line automatically.</p>
+        </div>
+        <button onclick="toggleHotelSearch('${T.key}')" class="btn-travel-primary shrink-0">${hotelSearchOpen === T.key ? 'Hide hotels' : 'Search hotels'}</button>
+      </div>
+      ${hotelSearchOpen === T.key ? renderHotelResults(T) : ''}
+    </div>`;
+
+  return `
+    <div class="mb-10">
+      <div class="flex items-center justify-between mb-4">
+        <p class="microlabel acc">✈️ Travel &amp; Stay · Capital One Travel</p>
+        ${fullyBooked ? `<button onclick="toggleTravelSummary('${T.key}')" class="text-xs font-bold fnt hover:opacity-70">▲ Show compact</button>` : ''}
+      </div>
+      ${flightCard}
+      ${hotelCard}
+    </div>`;
+}
+
+/* once both legs are booked, the full stat-grid cards give way to one
+   compact confirmation strip — the rest of the plan (Shopping, Explore,
+   itinerary) shouldn't have to fight travel logistics for space. */
+function renderTravelSummary(T, S) {
+  const [origin, dest] = flightFor(T).route.split(' → ');
+  const totalMiles = Math.round(S.flight.total * 5) + S.hotel.miles;
+  return `
+    <div class="mb-10">
+      <p class="microlabel acc mb-4">✈️ Travel &amp; Stay · Capital One Travel</p>
+      <button onclick="toggleTravelSummary('${T.key}')" class="travel-card w-full text-left p-5 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-4 min-w-0">
+          <div class="flex -space-x-2 shrink-0">
+            <span class="h-11 w-11 rounded-full flex items-center justify-center text-lg border-2" style="background: color-mix(in srgb, var(--accent) 16%, var(--surface)); border-color: var(--surface);">✈️</span>
+            <span class="h-11 w-11 rounded-full flex items-center justify-center text-lg border-2" style="background: color-mix(in srgb, var(--accent) 16%, var(--surface)); border-color: var(--surface);">🏨</span>
+          </div>
+          <div class="min-w-0">
+            <p class="font-bold text-sm sm:text-base truncate">${esc(origin)} → ${esc(dest)} · ${esc(S.hotel.name)}</p>
+            <p class="text-[11px] mut mt-1">${S.hotel.nights} nights · ${totalMiles.toLocaleString()} miles earned · both confirmed</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 shrink-0">
+          <span class="text-[10px] font-bold uppercase tracking-widest rounded-full px-3 py-1.5" style="background: rgba(159,211,86,.14); color:#5c8f1d;">Booked ✓</span>
+          <span class="text-xs font-bold fnt">Details ▾</span>
+        </div>
+      </button>
+    </div>`;
+}
+
+function toggleTravelSummary(tripKey) {
+  const S = tripState[tripKey];
+  S.travelExpanded = !S.travelExpanded;
+  renderPlan();
+}
+
+function renderHotelResults(T) {
+  const nights = T.nights || 3;
+  return `
+    <div class="grid sm:grid-cols-3 gap-4 mt-6">
+      ${hotelsFor(T).map((h) => {
+        const total = h.nightly * nights;
+        const net = Math.max(0, total - 300);
+        const isPremier = h.collection === 'premier';
+        const pred = h.prediction.advice === 'book_now'
+          ? { icon: '📈', text: `Trending up ${h.prediction.pct}% — book today` }
+          : { icon: '🧊', text: `May ease ${h.prediction.pct}% — freeze or wait` };
+        return `
+        <div class="travel-card ${isPremier ? 'premier' : ''} overflow-hidden flex flex-col">
+          ${isPremier ? `<div class="travel-ribbon px-4 py-2.5 text-center"><p class="text-[10px] font-bold uppercase tracking-[.3em]">◆ Premier Collection</p></div>` : ''}
+          <div class="p-5 flex-1 flex flex-col">
+            <p class="font-display text-xl font-light leading-tight">${esc(h.name)}</p>
+            <p class="text-xs mut mt-1.5">${esc(h.area)} · ${h.rating}★</p>
+            <div class="insight-row mt-4">
+              <span class="insight-dot" style="background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); font-size:13px;">${pred.icon}</span>
+              <p class="text-xs mut leading-snug pt-2">${pred.text}</p>
+            </div>
+            ${isPremier ? `<p class="text-[11px] mt-3 leading-relaxed" style="color:#b8860b;">$100 experience credit · daily breakfast for two · upgrade when available</p>` : ''}
+            <div class="mt-auto pt-5">
+              <p class="text-2xl font-bold" style="font-variant-numeric:tabular-nums;">${fmt0(h.nightly)}<span class="text-xs mut font-medium"> / night</span></p>
+              <p class="text-[11px] mut mt-1">${fmt0(total)} total · <b style="color:#5c8f1d;">${fmt0(net)} after credit</b> · ⭐ 10x miles</p>
+              <button onclick="bookHotel('${T.key}','${h.id}')" class="btn-travel-primary w-full mt-3">Book this stay</button>
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+function setTravelIntent(tripKey, val) {
+  tripState[tripKey].travelIntent = val;
+  renderPlan();
+}
+
+function toggleHotelSearch(tripKey) {
+  hotelSearchOpen = hotelSearchOpen === tripKey ? null : tripKey;
+  renderPlan();
+}
+
+function bookHotel(tripKey, hotelId) {
+  const T = TRIPS[tripKey], S = tripState[tripKey];
+  if (S.hotel) return;
+  const hotel = hotelsFor(T).find((h) => h.id === hotelId);
+  const nights = T.nights || 3;
+  const total = hotel.nightly * nights;
+  const creditApplied = Math.min(300, total);
+  const net = total - creditApplied;
+  const miles = total * 10;
+  S.hotel = { ...hotel, nights, total, creditApplied, net, miles, dropDetected: false, protectionClaimed: false };
+  S.booked += net; S.bookedCount += 1;
+  addTxn({ icon: '🏨', merchant: 'Capital One Travel', desc: `${hotel.name} · ${nights} nights · 10x miles`, date: 'Jul 6', amount: total, mcc: '7011', category: 'Lodging', location: 'capitalonetravel.com', miles, tag: { trip: tripKey, mode: 'auto' } });
+  addTxn({ icon: '💳', merchant: 'Capital One Travel', desc: 'Venture X annual travel credit applied', date: 'Jul 6', amount: -creditApplied, credit: true, mcc: '7011', category: 'Credit', location: 'capitalonetravel.com', miles: 0, tag: { trip: tripKey, mode: 'auto' } });
+  T.basePerk = { threshold: 400, desc: `Spend $400 anywhere in ${T.city} → late checkout + rooftop apéritif at ${hotel.name}` };
+  hotelSearchOpen = null;
+  if (hotel.collection === 'premier' && !T.vb.some((v) => v.premier)) {
+    T.vb.push({ premier: true, icon: '🥂', ask: 'Have the hotel do something for our anniversary', reply: `Arranged with the property directly — champagne on arrival, a table held at their signature restaurant, and a note from the GM. ${hotel.name} knows.`, stop: { day: 0, time: '19:00', cat: 'dining', title: `${hotel.name} — anniversary surprise`, sub: 'Arranged via Velocity Black × Premier Collection' } });
+  }
+  armTrip(tripKey);
+  console.log(`[C1Travel] booking.confirmed → trip_id:${T.id}, product:hotel, property:${hotel.name}, credit:$${creditApplied}`);
+  toast('🏨', 'Booked via Capital One Travel', `${hotel.name} · ${nights} nights · ${fmt0(net)} net after $${creditApplied} credit`, 'brand');
+  renderPlan();
+}
+
+function bookFlight(tripKey) {
+  const T = TRIPS[tripKey], S = tripState[tripKey];
+  if (S.flight && !S.flight.frozen) return;
+  const f = flightFor(T);
+  const travelers = 1 + T.mates.length;
+  const total = f.price * travelers;
+  S.flight = { ...f, total, travelers };
+  S.booked += total; S.bookedCount += 1;
+  addTxn({ icon: '✈️', merchant: 'Capital One Travel', desc: `${f.route} · ${travelers} traveler${travelers > 1 ? 's' : ''} · 5x miles`, date: 'Jul 6', amount: total, mcc: '3007', category: 'Airlines', location: 'capitalonetravel.com', miles: total * 5, tag: { trip: tripKey, mode: 'auto' } });
+  armTrip(tripKey);
+  console.log(`[C1Travel] booking.confirmed → trip_id:${T.id}, product:flight, route:${f.route}`);
+  toast('✈️', 'Booked via Capital One Travel', `${f.route} confirmed · 5x miles earned`, 'brand');
+  renderPlan();
+}
+
+function freezeFlight(tripKey) {
+  const T = TRIPS[tripKey], S = tripState[tripKey];
+  const f = flightFor(T);
+  S.flight = { ...f, frozen: true, frozenPrice: f.price };
+  addTxn({ icon: '🧊', merchant: 'Capital One Travel', desc: 'Price freeze fee · 6 days', date: 'Jul 6', amount: 8, mcc: '3007', category: 'Airlines', location: 'capitalonetravel.com', miles: 0, tag: { trip: tripKey, mode: 'auto' } });
+  console.log(`[C1Travel] price.freeze → trip_id:${T.id}, route:${f.route}, held:$${f.price}`);
+  toast('🧊', 'Price frozen', `${f.route} held at ${fmt0(f.price)} for 6 days`, 'brand');
+  renderPlan();
+}
+
 function buyRec(id) {
   const T = TRIPS[viewTrip], S = tripState[viewTrip];
   const R = RECS[T.wx.kind];
@@ -164,9 +422,12 @@ function buyRec(id) {
   const amount = id === 'hero' ? r.price * travelers : r.price;
   S.bought.add(String(id));
   S.credits += amount * r.back / 100;
-  addTxn({ icon: r.icon, merchant: 'Capital One Shopping', desc: `${r.name}${id === 'hero' ? ` × ${travelers}` : ''} · ${r.back}% credits back`, date: 'Jul 7', amount, mcc: '5942', category: 'Merchandise', location: 'capitaloneshopping.com', miles: amount * 2, tag: { trip: viewTrip, mode: 'shop' } });
-  console.log(`[C1Shopping] rec purchased → ${r.name} $${amount}, tagged trip_id: ${T.id}`);
-  toast('🛍️', 'Added to your trip kit', `${r.name} · ${fmt(amount * r.back / 100)} credits earned · tagged to ${T.name}`);
+  /* Shopping hands the purchase off to the real retailer's checkout — Paze
+     is what completes it there without retyping a card number. Same card,
+     same 2x earn, same Shopping credits-back; Paze only changes checkout. */
+  addTxn({ icon: r.icon, merchant: r.retailer, desc: `${r.name}${id === 'hero' ? ` × ${travelers}` : ''} · via Paze · ${r.back}% Shopping credits back`, date: 'Jul 7', amount, mcc: '5942', category: 'Merchandise', location: `${r.retailer.toLowerCase().replace(/\s+/g, '')}.com`, miles: amount * 2, tag: { trip: viewTrip, mode: 'shop' } });
+  console.log(`[Paze] checkout.completed → merchant:${r.retailer}, amount:$${amount}, trip_id:${T.id}`);
+  toast('🅿️', `Bought on ${r.retailer}`, `Paid with Paze · ${fmt(amount * r.back / 100)} Shopping credits earned`, 'brand');
   renderPlan();
 }
 
@@ -183,6 +444,7 @@ function applyDrop(di, si) {
   const d = dropFor(stop);
   stop.price -= d.save;
   stop.dropApplied = d.save;
+  stop.dropVia = d.via;
   S.saved += d.save;
   console.log(`[C1Shopping] price drop applied → ${stop.title}, saved $${d.save} via ${d.via}`);
   toast('📉', 'Price drop applied', `${stop.title} — saved $${d.save} via ${d.via}`);
@@ -190,7 +452,22 @@ function applyDrop(di, si) {
 }
 
 /* ── trip selection & dynamic chrome ── */
-function setViewTrip(key) { viewTrip = key; renderTripSwitch(); renderPlan(); }
+/* viewTrip (what Plan shows) and simTrip (what the simulator will ignite)
+   stay in sync until a trip actually goes live — otherwise picking a trip
+   in the planner silently leaves Live/Wrap pointed at whatever city the
+   simulator defaulted to, which reads as "hardcoded to Paris." */
+function setViewTrip(key) {
+  viewTrip = key;
+  hotelSearchOpen = null;
+  if (!liveTrip) {
+    simTrip = key;
+    renderSimToggle();
+    renderSimLabels();
+    renderLiveHeader();
+  }
+  renderTripSwitch();
+  renderPlan();
+}
 function renderTripSwitch() {
   $('trip-switch').innerHTML = Object.values(TRIPS).map((T) =>
     `<button class="trip-chip ${viewTrip === T.key ? 'on' : ''} rounded-full px-5 py-2 text-sm font-bold srf" onclick="setViewTrip('${T.key}')">${T.flag} ${esc(T.name)}</button>`
@@ -220,11 +497,12 @@ function createTrip() {
     days.push({ label: `${WD[d.getUTCDay()]} · ${dLabel(d)}${i === 0 ? ' — Arrival day' : ''}`, stops: [] });
   }
   const zip = String(30000 + Math.floor(Math.random() * 60000));
+  const nights = Math.max(1, Math.round((end - start) / 86400000));
 
   TRIPS[key] = {
     key, id: `${key.slice(0, 3)}-2026`, name: `Trip to ${city}`, flag,
     city, country: '', zip, dates, mates: mate ? [mate] : [],
-    budget, tower: '🌆', airports: city.slice(0, 3).toUpperCase(), welcome: `Welcome to ${city} ${flag}`,
+    budget, nights, tower: '🌆', airports: city.slice(0, 3).toUpperCase(), welcome: `Welcome to ${city} ${flag}`,
     heroWord: city, planSub: 'A fresh line, waiting for ink. Add stops, jot notes, invite tripmates — City Key handles the city.',
     wx: { kind: WX_BY_CITY[city.toLowerCase()] || 'mild', label: WX_LABEL[WX_BY_CITY[city.toLowerCase()] || 'mild'] },
     notes: '', places: [],
@@ -257,9 +535,8 @@ function createTrip() {
   tripState[key] = freshTripState();
 
   closeNewTrip();
-  renderHomeTrips(); renderTripSwitch(); renderSimToggle();
-  if (!liveTrip) { simTrip = key; renderSimToggle(); renderSimLabels(); }
-  setViewTrip(key);
+  renderHomeTrips();
+  setViewTrip(key); // syncs simTrip too, so the new trip is what Live/Wrap will ignite
   go('plan');
   console.log(`[VenturePlanner] trip created → trip_id: ${TRIPS[key].id}, city: ${city}`);
   toast('🗺️', `${flag} Trip to ${city} created`, 'The line is drawn — City Key stations auto-provisioned');
@@ -279,10 +556,13 @@ function renderPlan() {
   renderLedger();
 
   const led = ledgerFor(viewTrip);
-  const committed = S.booked + led.total;
+  const committed = led.total;
   const pct = Math.min(100, Math.round((committed / T.budget) * 100));
 
   $('plan-body').innerHTML = `
+    <!-- ░░ CAPITAL ONE TRAVEL · flights & hotels ░░ -->
+    ${renderGettingThere(T, S)}
+
     <!-- ░░ EXPLORE ░░ -->
     <p class="microlabel acc mb-3">Explore · curated for ${esc(T.city)}</p>
     <div class="grid sm:grid-cols-3 gap-3">
@@ -390,16 +670,30 @@ function renderStop(T, S, day, stop, di, si) {
   if (booked) {
     statusHtml = `<span class="text-[10px] font-bold uppercase tracking-widest rounded-full px-3 py-1.5" style="background: rgba(159,211,86,.14); color:#5c8f1d;">Booked ✓</span>`;
     bodyHtml = `<div class="mt-4 flex flex-wrap items-center gap-3">
-      ${stop.status === 'bookedNow' ? `<p class="text-sm font-bold" style="color:#79a83e;">Booked via Capital One Travel ✓ · 5x miles earned</p>` : ''}
+      ${stop.status === 'bookedNow'
+        ? `<p class="text-sm font-bold" style="color:#79a83e;">${stop.paidWithPaze ? `Paid with Paze ✓ · via ${esc(stop.dropVia)}` : 'Booked via Capital One Travel ✓ · 5x miles earned'}</p>`
+        : ''}
       ${ticketBtn}
     </div>`;
-  } else if (stop.status === 'book') {
-    statusHtml = `<span class="text-[10px] font-bold uppercase tracking-widest text-amber-600 rounded-full px-3 py-1.5" style="background: rgba(245,158,11,.13);">Pending</span>`;
-    bodyHtml = `<button onclick="bookItem('${viewTrip}',${di},${si})"
-      class="mt-4 rounded-full bg-c1blue hover:bg-[#026597] active:bg-[#014e74] text-white text-sm font-bold px-5 py-2.5 transition-colors">
-      Book via Capital One Travel</button>`;
   } else {
-    statusHtml = `<span class="text-[10px] font-bold uppercase tracking-widest fnt rounded-full px-3 py-1.5 srf2">Idea</span>`;
+    statusHtml = stop.status === 'book'
+      ? `<span class="text-[10px] font-bold uppercase tracking-widest text-amber-600 rounded-full px-3 py-1.5" style="background: rgba(245,158,11,.13);">Pending</span>`
+      : `<span class="text-[10px] font-bold uppercase tracking-widest fnt rounded-full px-3 py-1.5 srf2">Idea</span>`;
+    const actions = [];
+    if (stop.status === 'book') {
+      actions.push(`<button onclick="bookItem('${viewTrip}',${di},${si})"
+        class="rounded-full bg-c1blue hover:bg-[#026597] active:bg-[#014e74] text-white text-sm font-bold px-5 py-2.5 transition-colors">
+        Book via Capital One Travel</button>`);
+    }
+    /* a price drop was found on an external site — Paze completes that
+       checkout directly, at the normal earn rate for the category, not the
+       Capital One Travel bonus (this isn't a Capital One Travel booking) */
+    if (stop.dropApplied) {
+      actions.push(`<button onclick="payWithPaze('${viewTrip}',${di},${si})"
+        class="rounded-full text-white text-sm font-bold px-5 py-2.5 hover:brightness-110 active:scale-95 transition" style="background:#0a5c53;">
+        Pay with Paze · via ${esc(stop.dropVia)}</button>`);
+    }
+    if (actions.length) bodyHtml = `<div class="mt-4 flex flex-wrap items-center gap-3">${actions.join('')}</div>`;
   }
   const hint = stop.tier
     ? (tierOpen ? `<p class="mut text-sm mt-0.5"><b class="text-keyg">${stop.openHint}</b></p>`

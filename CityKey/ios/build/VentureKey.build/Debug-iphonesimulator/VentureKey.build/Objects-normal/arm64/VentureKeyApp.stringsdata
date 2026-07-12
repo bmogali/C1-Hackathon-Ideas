@@ -1,0 +1,56 @@
+{
+  "source": "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/VentureKeyApp.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Home",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 21
+        }
+      },
+      {
+        "comment": "",
+        "key": "Wallet",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 24
+        }
+      },
+      {
+        "comment": "",
+        "key": "Plan",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 27
+        }
+      },
+      {
+        "comment": "",
+        "key": "City Key",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 30
+        }
+      },
+      {
+        "comment": "",
+        "key": "Velocity Black concierge",
+        "location": {
+          "startingColumn": 41,
+          "startingLine": 131
+        }
+      },
+      {
+        "comment": "",
+        "key": "Open auth-stream simulator",
+        "location": {
+          "startingColumn": 37,
+          "startingLine": 142
+        }
+      }
+    ]
+  },
+  "version": 1
+}

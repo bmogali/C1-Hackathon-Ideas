@@ -8,3 +8,4 @@ renderTripSwitch();
 renderSimToggle();
 renderSimLabels();
 renderPlan();
+renderIncomingRequest();

@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Venture Key — iOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════
+   VENTURE KEY · iOS companion
+   Same three-act theme as the web app (paper → midnight → dawn),
+   presented as a real iPhone screen instead of a browser tab.
+   ══════════════════════════════════════════════ */
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 18px; padding: 28px 12px 48px;
+  background: radial-gradient(1200px 700px at 50% -10%, #eef1f4, #d7dce2);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  color: #171310;
+}
+.stage-note { font-size: 12px; font-weight: 600; letter-spacing: .02em; color: #6b7280; text-align: center; max-width: 380px; }
+.stage-note b { color: #171310; }
+
+/* ── phone chassis ── */
+.phone {
+  position: relative; width: min(390px, 92vw); aspect-ratio: 390 / 844;
+  background: #0b0b0d; border-radius: 54px; padding: 14px;
+  box-shadow: 0 40px 90px -30px rgba(10,14,20,.55), 0 0 0 1.5px rgba(255,255,255,.06) inset;
+}
+.screen {
+  position: relative; width: 100%; height: 100%; border-radius: 42px; overflow: hidden;
+  background: var(--bg); transition: background-color .9s ease;
+  display: flex; flex-direction: column;
+}
+:root, .screen { --bg:#f4f1ea; --card:#ffffff; --card2:#efeadf; --line:#e4ddcd; --ink:#171310; --sub:#7d7365; --faint:#a89d8c; --accent:#0276b1; --accent2:#026597; }
+.screen.night { --bg:#05070c; --card:#12151c; --card2:#1a1f29; --line:#2a303c; --ink:#eef5f9; --sub:#8ba0af; --faint:#576b79; --accent:#37d6ea; --accent2:#2ac1d6; }
+.screen.dawn  { --bg:#f7ede3; --card:#fffaf5; --card2:#f4e6da; --line:#ecdccc; --ink:#201410; --sub:#8a7466; --faint:#b39a88; --accent:#d96d2a; --accent2:#c25a1c; }
+.screen, .screen * { color: var(--ink); }
+
+.dynamic-island {
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 112px; height: 34px; background: #000; border-radius: 20px; z-index: 60;
+}
+.home-indicator {
+  position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  width: 134px; height: 5px; border-radius: 4px; background: var(--ink); opacity: .55; z-index: 60;
+}
+
+/* ── status bar ── */
+.statusbar { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 16px 26px 2px; font-size: 15px; font-weight: 600; z-index: 55; }
+.sb-right { display: flex; align-items: center; gap: 5px; }
+.sig { display: flex; align-items: flex-end; gap: 1.5px; height: 10px; }
+.sig i { display: block; width: 3px; background: var(--ink); border-radius: 1px; }
+.sig i:nth-child(1){height:4px;} .sig i:nth-child(2){height:6px;} .sig i:nth-child(3){height:8px;} .sig i:nth-child(4){height:10px;}
+.wifi { width: 15px; height: 11px; position: relative; }
+.wifi::before { content:''; position:absolute; inset:0; border:2px solid var(--ink); border-radius:50% 50% 0 0 / 100% 100% 0 0; border-bottom:none; clip-path: polygon(0 40%, 100% 40%, 100% 100%, 0 100%); }
+.batt { width: 24px; height: 12px; border: 1.4px solid var(--ink); border-radius: 3.5px; position: relative; opacity: .95; }
+.batt::before { content:''; position:absolute; right:-4px; top:3px; width:2.5px; height:6px; background:var(--ink); border-radius:0 2px 2px 0; }
+.batt::after { content:''; position:absolute; top:1.5px; bottom:1.5px; left:1.5px; width:70%; background:var(--ink); border-radius: 1.5px; }
+
+/* ── nav bar / large title ── */
+.navbar { flex-shrink: 0; padding: 2px 20px 10px; }
+.nav-inline { font-size: 17px; font-weight: 700; text-align: center; opacity: 0; transition: opacity .2s ease; height: 0; overflow: hidden; }
+.nav-inline.show { opacity: 1; height: 20px; margin-bottom: 2px; }
+.nav-row { display: flex; align-items: center; justify-content: space-between; }
+.nav-large { font-size: 32px; font-weight: 800; letter-spacing: -.02em; transition: font-size .2s ease, opacity .2s ease; }
+.nav-large.shrink { font-size: 0; opacity: 0; height: 0; }
+.nav-side { width: 30px; }
+.nav-back { display: flex; align-items: center; gap: 2px; color: var(--accent); font-weight: 600; font-size: 17px; background: none; border: none; padding: 0; cursor: pointer; }
+
+/* ── content ── */
+.content { flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 100px; -webkit-overflow-scrolling: touch; }
+.content::-webkit-scrollbar { display: none; }
+.tab-page { display: none; animation: fadeUp .3s ease both; }
+.tab-page.active { display: block; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.sub { position: absolute; inset: 0; background: var(--bg); z-index: 40; display: flex; flex-direction: column; transform: translateX(101%); transition: transform .32s cubic-bezier(.22,1,.36,1); }
+.sub.show { transform: translateX(0); }
+
+/* ── ios list ── */
+.ios-list { background: var(--card); border-radius: 16px; overflow: hidden; border: .5px solid var(--line); }
+.ios-row { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-bottom: .5px solid var(--line); cursor: pointer; transition: background .12s; }
+.ios-row:last-child { border-bottom: none; }
+.ios-row:active { background: var(--card2); }
+.ios-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.ios-row .ios-title { font-size: 15px; font-weight: 600; line-height: 1.25; }
+.ios-row .ios-sub { font-size: 12.5px; color: var(--sub); margin-top: 1px; }
+.ios-chev { color: var(--faint); font-size: 15px; margin-left: auto; flex-shrink: 0; }
+.section-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--sub); padding: 0 4px; margin: 22px 0 7px; }
+.section-label:first-child { margin-top: 4px; }
+
+/* ── buttons ── */
+.btn { border: none; border-radius: 14px; font-weight: 700; font-size: 15.5px; padding: 12px 18px; cursor: pointer; transition: transform .1s ease, filter .15s ease; }
+.btn:active { transform: scale(.97); }
+.btn-fill { background: var(--accent); color: #fff; }
+.btn-fill:active { filter: brightness(.92); }
+.btn-tint { background: color-mix(in srgb, var(--accent) 13%, transparent); color: var(--accent); }
+.btn-gray { background: var(--card2); color: var(--ink); }
+.btn-block { width: 100%; text-align: center; }
+
+/* ── card ── */
+.card { background: var(--card); border-radius: 18px; padding: 16px; border: .5px solid var(--line); }
+.chip { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; border-radius: 99px; padding: 4px 10px; }
+.seg { display: flex; background: var(--card2); border-radius: 10px; padding: 2px; gap: 2px; }
+.seg button { flex: 1; border: none; background: transparent; padding: 6px 10px; font-size: 13px; font-weight: 700; border-radius: 8px; color: var(--sub); cursor: pointer; }
+.seg button.on { background: var(--card); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+
+/* ── venture card ── */
+.vcard { border-radius: 20px; padding: 20px; color: #fff; position: relative; overflow: hidden;
+  background: linear-gradient(135deg,#0e1f2f 0%,#16344b 55%,#0b2438 110%); aspect-ratio: 1.586; display:flex; flex-direction:column; justify-content:space-between; }
+.vcard::after { content:''; position:absolute; inset:0; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.09) 45%, transparent 60%); background-size:300% 100%; animation: sheen 5.5s ease-in-out infinite; }
+@keyframes sheen { 0%,55% { background-position:120% 0; } 85%,100% { background-position:-80% 0; } }
+
+/* ── tab bar ── */
+.tabbar { flex-shrink: 0; display: flex; padding: 6px 6px 22px; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(18px); border-top: .5px solid var(--line); position: relative; z-index: 50; }
+.tab-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; background: none; border: none; padding: 4px 0; cursor: pointer; color: var(--faint); }
+.tab-btn .ti { font-size: 21px; filter: grayscale(1) opacity(.7); transition: filter .15s; }
+.tab-btn .tl { font-size: 10px; font-weight: 600; }
+.tab-btn.on { color: var(--accent); }
+.tab-btn.on .ti { filter: none; }
+
+/* ── fab (simulator) ── */
+.fab { position: absolute; right: 16px; bottom: 92px; z-index: 55; width: 46px; height: 46px; border-radius: 50%;
+  background: #101418; color: #37d6ea; border: 1px solid rgba(55,214,234,.4); font-size: 18px;
+  box-shadow: 0 10px 26px rgba(0,0,0,.4); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.fab:active { transform: scale(.92); }
+
+/* ── sheet ── */
+.sheet-backdrop { position: fixed; inset: 0; background: rgba(10,10,14,.45); z-index: 200; opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+.sheet-backdrop.show { opacity: 1; pointer-events: auto; }
+.sheet { position: fixed; left: 50%; bottom: 0; width: min(390px, 92vw); max-height: 78%; overflow-y: auto;
+  background: var(--card, #fff); border-radius: 22px 22px 0 0; z-index: 201; padding: 10px 18px 28px;
+  transform: translate(-50%, 105%); transition: transform .32s cubic-bezier(.22,1,.36,1); }
+.sheet.show { transform: translate(-50%, 0); }
+.sheet-handle { width: 36px; height: 5px; border-radius: 3px; background: var(--faint, #ccc); margin: 4px auto 14px; }
+
+/* ── field ── */
+.field { width: 100%; background: var(--card2); border: none; border-radius: 12px; padding: 11px 13px; font-size: 15px; color: var(--ink); outline: none; }
+.field::placeholder { color: var(--faint); }
+
+/* ── line (city key) ── */
+.tl-wrap { position: relative; padding-left: 26px; }
+.tl-track { position: absolute; left: 5px; top: 6px; bottom: 6px; width: 3px; background: var(--line); border-radius: 3px; }
+.tl-fill { position: absolute; left: 5px; top: 6px; width: 3px; background: linear-gradient(180deg,#37d6ea,#9fd356); border-radius: 3px; transition: height 1s cubic-bezier(.22,1,.36,1); height: 0; }
+.tl-item { position: relative; padding-bottom: 20px; }
+.tl-dot { position: absolute; left: -26px; top: 2px; width: 13px; height: 13px; border-radius: 50%; background: var(--card2); border: 3px solid var(--line); z-index: 2; }
+.tl-dot.on { border-color: #9fd356; box-shadow: 0 0 0 4px rgba(159,211,86,.18); }
+.tl-dot.swipe { background: var(--accent); border-color: var(--accent); width:10px; height:10px; left:-24.5px; }
+
+/* ── splash ── */
+.splash { position: absolute; inset: 0; z-index: 70; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 30px;
+  background: linear-gradient(165deg,#03070c 0%,#0c2c40 55%,#0a5b7e 120%); color: #fff; }
+.splash.show { display: flex; }
+.splash .key { font-size: 62px; animation: keyTurn .8s cubic-bezier(.34,1.56,.64,1) both; }
+@keyframes keyTurn { 0%{transform:rotate(-90deg) scale(.3); opacity:0;} 60%{transform:rotate(10deg) scale(1.12); opacity:1;} 100%{transform:none;} }
+.fr { font-family: 'Fraunces', Georgia, serif; }
+
+/* ── wrap modal ── */
+.wrap-modal { position: fixed; left: 50%; top: 50%; width: min(390px, 92vw); aspect-ratio: 390/844; transform: translate(-50%,-50%) translateY(100%);
+  border-radius: 42px; overflow: hidden; z-index: 220; transition: transform .4s cubic-bezier(.22,1,.36,1); background: #f7ede3; }
+.wrap-modal.show { transform: translate(-50%,-50%) translateY(0); }
+.wrap-modal .content { padding-bottom: 40px; }
+
+/* ── toast ── */
+.toast { position: absolute; left: 14px; right: 14px; top: 58px; z-index: 65; display: flex; justify-content: center; pointer-events: none; }
+.toast-card { pointer-events: auto; max-width: 320px; background: rgba(28,28,30,.92); color: #fff; backdrop-filter: blur(10px);
+  border-radius: 16px; padding: 11px 15px; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.3);
+  transform: translateY(-30px); opacity: 0; transition: all .3s cubic-bezier(.22,1,.36,1); }
+.toast-card.show { transform: translateY(0); opacity: 1; }
+.toast-card .ti { font-size: 20px; }
+.toast-card .tt { font-size: 13px; font-weight: 700; }
+.toast-card .ts { font-size: 11.5px; opacity: .75; margin-top: 1px; }
+
+/* ── night sky ── */
+.stars { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 1.2s ease; z-index: 0; }
+.screen.night .stars { opacity: 1; }
+.stars i { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #cfeef7; animation: tw 3s infinite; }
+@keyframes tw { 0%,100%{opacity:.9;} 50%{opacity:.15;} }
+.skyline { position: absolute; bottom: -6px; right: -14px; font-size: 130px; opacity: 0; filter: grayscale(1) brightness(2.2); transition: opacity 1.2s ease; z-index: 0; pointer-events:none; }
+.screen.night .skyline { opacity: .08; }
+
+.mut { color: var(--sub); } .fnt { color: var(--faint); } .acc { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<p class="stage-note">📱 <b>Venture Key</b> · iOS companion — tap around, this is a live interactive mockup, not a screenshot.</p>
+
+<div class="phone">
+  <div class="screen" id="screen">
+    <div class="stars" id="stars"></div>
+    <div class="skyline" id="skyline">🗼</div>
+    <div class="dynamic-island"></div>
+
+    <!-- status bar -->
+    <div class="statusbar">
+      <span id="sb-time">9:41</span>
+      <div class="sb-right">
+        <div class="sig"><i></i><i></i><i></i><i></i></div>
+        <div class="wifi"></div>
+        <div class="batt"></div>
+      </div>
+    </div>
+
+    <!-- toast -->
+    <div class="toast"><div class="toast-card" id="toast"><span class="ti" id="toast-i">🔔</span><div><p class="tt" id="toast-t">Title</p><p class="ts" id="toast-s">Sub</p></div></div></div>
+
+    <!-- ═══ HOME ═══ -->
+    <div class="navbar"><div class="nav-row"><div class="nav-large">Home</div></div></div>
+    <div class="content" id="content-home">
+      <section class="tab-page active">
+        <p class="mut" style="font-size:15px; font-weight:600; margin:0 0 14px;">Good evening, Bharath 👋</p>
+
+        <button onclick="pushWallet('venturex')" class="vcard" style="border:none; width:100%; cursor:pointer; text-align:left;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; position:relative; z-index:1;">
+            <span style="font-size:10px; font-weight:800; letter-spacing:.2em; opacity:.65;">VENTURE X</span>
+            <span style="font-size:13px; font-weight:800;">Capital<span style="color:#ff5f57;">One</span></span>
+          </div>
+          <div style="position:relative; z-index:1;">
+            <div style="width:34px;height:24px;border-radius:5px;background:linear-gradient(135deg,#e8c56b,#b8933f); margin-bottom:10px;"></div>
+            <p style="font-family:monospace; letter-spacing:.25em; font-size:13px; opacity:.85; margin:0 0 10px;">•••• •••• •••• 4907</p>
+            <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+              <div><p style="font-size:9px; letter-spacing:.15em; opacity:.55; margin:0;">BALANCE</p><p id="home-bal" style="font-size:17px; font-weight:800; margin:2px 0 0;">$1,284.09</p></div>
+              <div style="text-align:right;"><p style="font-size:9px; letter-spacing:.15em; opacity:.55; margin:0;">MILES</p><p style="font-size:15px; font-weight:800; color:#37d6ea; margin:2px 0 0;">86,420</p></div>
+            </div>
+          </div>
+        </button>
+
+        <p class="section-label">Your trip</p>
+        <div class="ios-list">
+          <div class="ios-row" onclick="switchTrip('paris'); goTab('plan')">
+            <span class="ios-icon" style="background:rgba(2,118,177,.12);">🇫🇷</span>
+            <div><p class="ios-title">Summer in Paris</p><p class="ios-sub">Jul 12 – 18 · with Priya</p></div>
+            <span class="ios-chev">›</span>
+          </div>
+          <div class="ios-row" onclick="switchTrip('nyc'); goTab('plan')">
+            <span class="ios-icon" style="background:rgba(2,118,177,.12);">🗽</span>
+            <div><p class="ios-title">NYC Long Weekend</p><p class="ios-sub">Aug 21 – 24 · with Arjun</p></div>
+            <span class="ios-chev">›</span>
+          </div>
+        </div>
+
+        <p class="section-label">City Key</p>
+        <div class="ios-list">
+          <div class="ios-row" onclick="goTab('live')" style="cursor:pointer;">
+            <span class="ios-icon" id="home-ck-icon" style="background:rgba(120,120,120,.14);">🗝️</span>
+            <div><p class="ios-title" id="home-ck-title">Dormant</p><p class="ios-sub" id="home-ck-sub">Wakes on your first swipe abroad</p></div>
+            <span class="ios-chev">›</span>
+          </div>
+        </div>
+
+        <div id="home-zelle-incoming" style="display:none; margin-top:22px;">
+          <div class="card" style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:20px;">💰</span>
+            <p style="font-size:13px; font-weight:600; flex:1; margin:0;">Arjun requested $42.00 — Dinner</p>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button class="btn btn-fill" style="flex:1; background:#6d1ed4;" onclick="payIncoming()">Pay with Zelle®</button>
+            <button class="btn btn-gray" onclick="declineIncoming()">Decline</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ═══ WALLET (list) ═══ -->
+    <div class="navbar" id="nav-wallet" style="display:none;"><div class="nav-row"><div class="nav-large">Wallet</div></div></div>
+    <div class="content" id="content-wallet" style="display:none;">
+      <section class="tab-page active">
+        <p class="section-label">Accounts · $32,824.58 in deposits</p>
+        <div class="ios-list">
+          <div class="ios-row" onclick="pushWallet('venturex')"><span class="ios-icon" style="background:rgba(14,31,47,.12);">✈️</span><div><p class="ios-title">Venture X ····4907</p><p class="ios-sub">The card that travels</p></div><span class="ios-chev" id="wallet-vx-bal">$1,284.09 ›</span></div>
+          <div class="ios-row" onclick="pushWallet('checking')"><span class="ios-icon" style="background:rgba(2,118,177,.12);">🏦</span><div><p class="ios-title">360 Checking</p><p class="ios-sub">Direct deposit · Fridays</p></div><span class="ios-chev" id="wallet-chk-bal">$8,214.55 ›</span></div>
+          <div class="ios-row" onclick="pushWallet('savings')"><span class="ios-icon" style="background:rgba(46,139,98,.14);">🌱</span><div><p class="ios-title">360 Performance Savings</p><p class="ios-sub">3.90% APY</p></div><span class="ios-chev">$24,610.03 ›</span></div>
+          <div class="ios-row" onclick="pushWallet('quicksilver')"><span class="ios-icon" style="background:rgba(27,37,48,.12);">💳</span><div><p class="ios-title">Quicksilver ····1189</p><p class="ios-sub">AutoPay on · paid off</p></div><span class="ios-chev">$0.00 ›</span></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- WALLET · account detail (push) -->
+    <div class="sub" id="sub-account">
+      <div class="navbar"><div class="nav-row"><button class="nav-back" onclick="closeSub('sub-account')">‹ Wallet</button><div class="nav-side"></div></div>
+        <div class="nav-large" id="acct-title" style="font-size:26px; margin-top:6px;">Venture X</div></div>
+      <div class="content">
+        <div class="card" style="margin-bottom:18px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div><p class="section-label" style="margin:0 0 2px;">Balance</p><p style="font-size:19px; font-weight:800; margin:0;" id="acct-balance">$1,284.09</p></div>
+            <div><p class="section-label" style="margin:0 0 2px;">Available credit</p><p style="font-size:19px; font-weight:800; margin:0;" id="acct-credit">$28,715</p></div>
+            <div><p class="section-label" style="margin:0 0 2px;">Miles</p><p style="font-size:19px; font-weight:800; margin:0;" class="acc" id="acct-miles">86,420</p></div>
+            <div><p class="section-label" style="margin:0 0 2px;">Tagged to trip</p><p style="font-size:19px; font-weight:800; margin:0;" id="acct-tagged">$0</p></div>
+          </div>
+        </div>
+        <p class="section-label">Recent activity</p>
+        <div class="ios-list" id="acct-txns"></div>
+      </div>
+    </div>
+
+    <!-- ═══ PLAN ═══ -->
+    <div class="navbar" id="nav-plan" style="display:none;">
+      <div class="nav-row"><div class="nav-large">Plan</div></div>
+      <div class="seg" style="margin-top:10px;">
+        <button id="segp-paris" onclick="switchTrip('paris')" class="on">🇫🇷 Paris</button>
+        <button id="segp-nyc" onclick="switchTrip('nyc')">🗽 NYC</button>
+      </div>
+    </div>
+    <div class="content" id="content-plan" style="display:none;">
+      <section class="tab-page active">
+        <div class="card" style="margin-bottom:16px;">
+          <p class="fr" style="font-size:22px; font-weight:600; margin:0 0 3px;" id="plan-hero">Paris, drawn.</p>
+          <p class="mut" style="font-size:13px; margin:0;" id="plan-dates">Jul 12 – 18 · with Priya</p>
+        </div>
+
+        <p class="section-label">Getting there &amp; staying</p>
+        <div class="card" id="plan-travel"></div>
+
+        <p class="section-label">Capital One Shopping</p>
+        <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:4px; margin:0 -2px;" id="plan-shopping"></div>
+
+        <p class="section-label">Itinerary</p>
+        <div id="plan-itinerary"></div>
+      </section>
+    </div>
+
+    <!-- ═══ CITY KEY / LIVE ═══ -->
+    <div class="navbar" id="nav-live" style="display:none;"><div class="nav-row"><div class="nav-large">City Key</div></div></div>
+    <div class="content" id="content-live" style="display:none;">
+      <section class="tab-page active">
+        <div class="card" style="margin-bottom:18px;" id="live-hero-card">
+          <p class="fr" style="font-size:24px; font-weight:600; margin:0 0 4px;" id="live-hero">Paris, asleep.</p>
+          <p class="mut" style="font-size:13px; margin:0;" id="live-sub">The line is dark. Fire the simulator to ignite it.</p>
+          <div id="live-rail" style="display:none; margin-top:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:baseline;">
+              <p class="section-label" style="margin:0;">Destination spend</p>
+              <p style="font-size:11px; font-weight:700;" class="acc" id="live-next">—</p>
+            </div>
+            <p style="font-size:30px; font-weight:800; margin:2px 0 8px;" id="live-spend">$0</p>
+            <div style="height:6px; border-radius:4px; background:var(--card2); overflow:hidden;">
+              <div id="live-bar" style="height:100%; width:0%; background:linear-gradient(90deg,#37d6ea,#9fd356); transition:width 1s cubic-bezier(.22,1,.36,1);"></div>
+            </div>
+          </div>
+        </div>
+        <div id="live-line-wrap" style="display:none;">
+          <p class="section-label">The line</p>
+          <div class="tl-wrap" id="tl-wrap">
+            <div class="tl-track"></div>
+            <div class="tl-fill" id="tl-fill"></div>
+            <div id="tl-rows"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- tab bar -->
+    <nav class="tabbar">
+      <button class="tab-btn on" data-tab="home" onclick="goTab('home')"><span class="ti">🏠</span><span class="tl">Home</span></button>
+      <button class="tab-btn" data-tab="wallet" onclick="goTab('wallet')"><span class="ti">💳</span><span class="tl">Wallet</span></button>
+      <button class="tab-btn" data-tab="plan" onclick="goTab('plan')"><span class="ti">🗺️</span><span class="tl">Plan</span></button>
+      <button class="tab-btn" data-tab="live" onclick="goTab('live')"><span class="ti">🗝️</span><span class="tl" id="tab-live-label">City Key</span></button>
+    </nav>
+
+    <button class="fab" onclick="openSheet('sim')" title="Simulator">⚙️</button>
+    <div class="home-indicator"></div>
+
+    <!-- ignition splash -->
+    <div class="splash" id="splash">
+      <div class="key">🗝️</div>
+      <p style="font-size:10px; font-weight:800; letter-spacing:.3em; color:#37d6ea; margin:18px 0 8px;" id="splash-zip">OUT-OF-MARKET SWIPE</p>
+      <p class="fr" style="font-size:34px; font-weight:600; margin:0;">City Key<br/><b>Activated</b></p>
+      <p style="font-size:14px; opacity:.85; margin:14px 0 0;" id="splash-welcome">Bienvenue à Paris 🇫🇷</p>
+    </div>
+  </div>
+</div>
+
+<!-- sheet backdrop + sheet (shared) -->
+<div class="sheet-backdrop" id="sheet-backdrop" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet"><div class="sheet-handle"></div><div id="sheet-body"></div></div>
+
+<!-- WRAP full-screen modal -->
+<div class="wrap-modal dawn" id="wrap-modal">
+  <div class="dynamic-island"></div>
+  <div class="statusbar"><span>9:41</span><div class="sb-right"><div class="sig"><i></i><i></i><i></i><i></i></div><div class="wifi"></div><div class="batt"></div></div></div>
+  <div class="navbar"><div class="nav-row"><button class="nav-back" onclick="closeWrap()">‹ Close</button><div class="nav-side"></div></div></div>
+  <div class="content" id="wrap-content">
+    <p class="mut" style="font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin:0 0 6px;" id="wrap-kicker">Trip settled</p>
+    <p class="fr" style="font-size:30px; font-weight:600; margin:0 0 18px;" id="wrap-title">Paris, wrapped.</p>
+
+    <div style="border-radius:20px; overflow:hidden; margin-bottom:18px;">
+      <div style="padding:20px; color:#fff; background:linear-gradient(150deg,#1b1030 0%,#013d5b 45%,#d96d2a 130%);">
+        <p style="font-size:10px; opacity:.55; letter-spacing:.15em; margin:0;">VENTURE KEY · TRIP WRAPPED</p>
+        <p class="fr" style="font-size:34px; font-weight:600; margin:6px 0 2px;" id="wrap-airports">CDG → IAD</p>
+        <p style="font-size:12px; opacity:.7; margin:0 0 16px;" id="wrap-place">Paris, France</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div><p style="font-size:9px; opacity:.5; letter-spacing:.1em; margin:0;">TRIP LEDGER</p><p style="font-size:19px; font-weight:800; margin:2px 0 0;" id="wrap-spend">$0</p></div>
+          <div><p style="font-size:9px; opacity:.5; letter-spacing:.1em; margin:0;">MILES EARNED</p><p style="font-size:19px; font-weight:800; margin:2px 0 0; color:#37d6ea;" id="wrap-miles">0</p></div>
+          <div><p style="font-size:9px; opacity:.5; letter-spacing:.1em; margin:0;">STATIONS</p><p style="font-size:19px; font-weight:800; margin:2px 0 0;" id="wrap-stations">0/3</p></div>
+          <div><p style="font-size:9px; opacity:.5; letter-spacing:.1em; margin:0;">WALLET SHARE</p><p style="font-size:19px; font-weight:800; margin:2px 0 0;" id="wrap-share">0%</p></div>
+        </div>
+      </div>
+      <div style="background:#10131c; padding:14px 20px; color:#fff; font-size:11px; opacity:.6;">Boarding pass · Venture Key</div>
+    </div>
+
+    <div id="wrap-split"></div>
+
+    <p class="section-label">Share</p>
+    <div style="display:flex; gap:16px; padding:4px 4px 10px;">
+      <button onclick="toastShow('📤','Shared to Messages','')" class="btn-gray" style="width:52px;height:52px;border-radius:50%;font-size:20px;border:none;">💬</button>
+      <button onclick="toastShow('📤','Shared to Photos','Saved to camera roll')" class="btn-gray" style="width:52px;height:52px;border-radius:50%;font-size:20px;border:none;">🖼️</button>
+      <button onclick="toastShow('📤','Copied link','')" class="btn-gray" style="width:52px;height:52px;border-radius:50%;font-size:20px;border:none;">🔗</button>
+    </div>
+
+    <button class="btn btn-fill btn-block" style="margin-top:8px;" onclick="closeWrap()">Done</button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   VENTURE KEY iOS · self-contained state machine
+   Mirrors the web app's Paris/NYC trips + City Key loop.
+═══════════════════════════════════════════════ */
+const TRIPS = {
+  paris: {
+    flag:'🇫🇷', city:'Paris', country:'France', dates:'Jul 12 – 18', mate:'Priya', zip:'75004', airports:'CDG', tower:'🗼',
+    heroWord:'Paris', welcome:'Bienvenue à Paris 🇫🇷', budget:2400,
+    hotels:[
+      {id:'std', name:'Hôtel Bastille Speria', nightly:165, tier:'Standard'},
+      {id:'lif', name:'Hôtel Le Marais', nightly:210, tier:'Lifestyle'},
+      {id:'prem', name:'Hôtel Plaza Vendôme Suites', nightly:410, tier:'Premier'},
+    ],
+    shopping:[{icon:'🧴',name:'SPF 50 sunscreen',price:12,retailer:'REI'},{icon:'🕶️',name:'Polarized sunglasses',price:28,retailer:'Warby Parker'},{icon:'🔌',name:'Travel adapter',price:23,retailer:'Amazon'}],
+    tiers:[
+      {id:1,threshold:100,emoji:'🥐',title:'Pâtisserie Fleur',reward:'Free macaron'},
+      {id:2,threshold:300,emoji:'🖼️',title:"Musée d'Orsay",reward:'50% off entry'},
+      {id:3,threshold:600,emoji:'🚤',title:'Seine Sunset Cruise',reward:'$25 statement credit'},
+    ],
+    days:[
+      {label:'Sun · Jul 12', stops:[
+        {time:'09:30', title:'Café de Flore', sub:'Breakfast with Priya', status:'booked'},
+        {time:'11:00', title:'Louvre Museum', sub:'Timed entry · $22', status:'book', price:22},
+        {time:'15:00', title:'Eiffel Tower Summit', sub:'5x miles + VIP access · $45', status:'book', price:45},
+      ]},
+      {label:'Mon · Jul 13', stops:[
+        {time:'10:00', title:"Musée d'Orsay", sub:'🔒 Tier 2 pays half — unlocks at $300', status:'idea', price:18},
+        {time:'19:30', title:'Seine Sunset Cruise', sub:'🔒 Tier 3 credits $25 — unlocks at $600', status:'idea', price:38},
+      ]},
+    ],
+    script:{
+      ign:{merchant:'Hôtel Le Marais', amount:120, icon:'🏨', note:'Ignition · MCC 7011'},
+      s2:{merchant:'Le Baristas', amount:160, icon:'☕', note:'Flat whites & tartines'},
+      s3:{merchant:'Bistro Chez Anne', amount:95, icon:'🍷', note:'Dinner in Le Marais'},
+    },
+    wrapAirports:'CDG → IAD', wrapPlace:'Paris, France',
+  },
+  nyc: {
+    flag:'🗽', city:'New York', country:'USA', dates:'Aug 21 – 24', mate:'Arjun', zip:'10003', airports:'JFK', tower:'🗽',
+    heroWord:'New York', welcome:'Welcome to New York 🗽', budget:1800,
+    hotels:[
+      {id:'std', name:'Pod 51', nightly:189, tier:'Standard'},
+      {id:'lif', name:'The Bowery Hotel', nightly:245, tier:'Lifestyle'},
+      {id:'prem', name:'The Mark', nightly:520, tier:'Premier'},
+    ],
+    shopping:[{icon:'🔋',name:'10k mAh power bank',price:29,retailer:'Amazon'},{icon:'🎒',name:'Anti-theft daypack',price:39,retailer:'REI'},{icon:'👟',name:'Walking sneakers',price:79,retailer:'Amazon'}],
+    tiers:[
+      {id:1,threshold:75,emoji:'🥯',title:'Russ & Daughters',reward:'Free bagel & schmear'},
+      {id:2,threshold:250,emoji:'🎨',title:'MoMA',reward:'50% off admission'},
+      {id:3,threshold:500,emoji:'🎭',title:'Broadway · TKTS',reward:'$30 ticket credit'},
+    ],
+    days:[
+      {label:'Fri · Aug 21', stops:[
+        {time:'13:00', title:"Katz's Delicatessen", sub:'Pastrami with Arjun', status:'booked'},
+        {time:'17:30', title:'Summit One Vanderbilt', sub:'5x miles · $42', status:'book', price:42},
+      ]},
+      {label:'Sat · Aug 22', stops:[
+        {time:'10:30', title:'MoMA — Timed entry', sub:'🔒 Tier 2 pays half — unlocks at $250', status:'book', price:28},
+        {time:'19:30', title:'Broadway — Hadestown', sub:'🔒 Tier 3 credits $30 — unlocks at $500', status:'idea', price:89},
+      ]},
+    ],
+    script:{
+      ign:{merchant:'The Bowery Hotel', amount:140, icon:'🏨', note:'Ignition · MCC 7011'},
+      s2:{merchant:'Ess-a-Bagel', amount:95, icon:'🥯', note:'Bagels & lox for two'},
+      s3:{merchant:"Joe's Pizza", amount:85, icon:'🍕', note:'Slices & souvenirs'},
+    },
+    wrapAirports:'JFK → IAD', wrapPlace:'New York, USA',
+  },
+};
+
+const freshState = () => ({ armed:false, hotel:null, active:false, settled:false, spend:0, swipes:[], claimed:new Set(), booked:0, zelle:[] });
+const S = { paris: freshState(), nyc: freshState() };
+let curTrip = 'paris', liveTrip = null, curTab = 'home', fired = {};
+const incoming = { from:'Arjun', amount:42, memo:'Dinner in Chicago', status:'pending' };
+
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2 });
+const fmt0 = (n) => '$' + Math.round(n).toLocaleString('en-US');
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ── clock ── */
+(function clock(){ const d=new Date(); $('sb-time').textContent = d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true}).replace(' ',''); })();
+
+/* ── stars ── */
+(function stars(){ const box=$('stars'); for(let i=0;i<40;i++){ const s=document.createElement('i'); s.style.left=Math.random()*100+'%'; s.style.top=Math.random()*55+'%'; s.style.animationDelay=Math.random()*3+'s'; box.appendChild(s);} })();
+
+/* ── toast ── */
+let toastTimer;
+function toastShow(icon, title, sub) {
+  $('toast-i').textContent = icon; $('toast-t').textContent = title; $('toast-s').textContent = sub || '';
+  $('toast').classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>$('toast').classList.remove('show'), 2600);
+}
+
+/* ── tabs ── */
+function goTab(tab) {
+  curTab = tab;
+  ['home','wallet','plan','live'].forEach(t => {
+    $('content-'+t).style.display = t===tab ? 'block' : 'none';
+    const nav = $('nav-'+t); if (nav) nav.style.display = t===tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('on', b.dataset.tab===tab));
+  closeSub('sub-account');
+  if (tab==='plan') renderPlan();
+  if (tab==='live') renderLive();
+  if (tab==='wallet') renderWalletList();
+}
+
+/* ── sub-pages (push nav) ── */
+function closeSub(id) { $(id).classList.remove('show'); }
+function pushWallet(key) {
+  goTab('wallet');
+  renderAccountDetail(key);
+  $('sub-account').classList.add('show');
+}
+
+/* ── sheet ── */
+function openSheet(kind) {
+  $('sheet-body').innerHTML = kind === 'sim' ? simSheetHtml() : kind;
+  $('sheet-backdrop').classList.add('show'); $('sheet').classList.add('show');
+}
+function closeSheet() { $('sheet-backdrop').classList.remove('show'); $('sheet').classList.remove('show'); }
+
+function simSheetHtml() {
+  const T = TRIPS[curTrip];
+  const dis = (b) => b ? 'disabled style="opacity:.35;"' : '';
+  return `
+    <p style="font-size:17px; font-weight:800; margin:0 0 4px;">Simulator</p>
+    <p class="mut" style="font-size:12px; margin:0 0 16px;">Auth-stream triggers for <b>${esc(T.city)}</b> — arm a trip in Plan first, or fire ignition cold.</p>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <button class="btn btn-gray btn-block" onclick="fireHomeSwipe()">🏠 Home Swipe · $4.50</button>
+      <button class="btn btn-block" style="background:#cc2427;color:#fff;" ${dis(fired.ignite)} onclick="fireIgnition()">✈️ First Out-of-Town Swipe · $${T.script.ign.amount}</button>
+      <button class="btn btn-gray btn-block" ${dis(!fired.ignite || fired.s2)} onclick="fireProgress()">${T.script.s2.icon} ${T.script.s2.merchant} · $${T.script.s2.amount}</button>
+      <button class="btn btn-gray btn-block" ${dis(!fired.s2 || fired.s3)} onclick="fireTier()">${T.script.s3.icon} ${T.script.s3.merchant} · $${T.script.s3.amount}</button>
+      <button class="btn btn-gray btn-block" ${dis(!liveTrip || fired.ret)} onclick="fireReturn()">🛬 Fly Home</button>
+      <button class="btn btn-block" style="background:#6d1ed4;color:#fff;" onclick="simZelle()">🔔 Zelle Response</button>
+      <button class="btn btn-gray btn-block" onclick="location.reload()">↺ Reset demo</button>
+    </div>`;
+}
+
+/* ── trip switching ── */
+function switchTrip(key) {
+  if (liveTrip) return;
+  curTrip = key;
+  $('segp-paris').classList.toggle('on', key==='paris');
+  $('segp-nyc').classList.toggle('on', key==='nyc');
+  if (curTab==='plan') renderPlan();
+  if (curTab==='live') renderLive();
+  closeSheet();
+}
+
+/* ═══════════ WALLET ═══════════ */
+const CHECK = { bal: 8214.55, activity: [
+  {icon:'💼', name:'Employer Inc — direct deposit', amt:2450},
+  {icon:'💳', name:'Payment to Venture X ····4907', amt:-1911.30},
+]};
+const TXNS = [
+  {icon:'✈️', merchant:'Air France', desc:'IAD → CDG · 2 travelers', amount:780, mcc:'3007', tag:null},
+];
+let vxBalance = 1284.09, vxMiles = 86420;
+
+function renderWalletList() {
+  $('wallet-vx-bal').textContent = fmt(vxBalance)+' ›';
+  $('wallet-chk-bal').textContent = fmt(CHECK.bal)+' ›';
+}
+
+function renderAccountDetail(key) {
+  const titles = { venturex:'Venture X', checking:'360 Checking', savings:'360 Performance Savings', quicksilver:'Quicksilver' };
+  $('acct-title').textContent = titles[key];
+  if (key === 'venturex') {
+    $('acct-balance').textContent = fmt(vxBalance);
+    $('acct-credit').textContent = fmt0(30000 - vxBalance);
+    $('acct-miles').textContent = vxMiles.toLocaleString();
+    const tagged = TXNS.filter(t => t.tag === curTrip).reduce((a,t)=>a+t.amount,0);
+    $('acct-tagged').textContent = fmt0(tagged);
+    $('acct-txns').innerHTML = TXNS.map(t => `
+      <div class="ios-row">
+        <span class="ios-icon" style="background:var(--card2);">${t.icon}</span>
+        <div><p class="ios-title">${esc(t.merchant)}</p><p class="ios-sub">${esc(t.desc)}${t.tag?` · tagged 🗝️`:''}</p></div>
+        <span class="ios-chev" style="color:var(--ink); font-weight:700; font-size:14px;">-${fmt(t.amount)}</span>
+      </div>`).join('') || `<div class="ios-row"><p class="ios-sub">No transactions yet.</p></div>`;
+  } else if (key === 'checking') {
+    $('acct-balance').textContent = fmt(CHECK.bal);
+    $('acct-credit').textContent = '—'; $('acct-miles').textContent = '—'; $('acct-tagged').textContent = 'No fees';
+    $('acct-txns').innerHTML = CHECK.activity.map(t => `
+      <div class="ios-row"><span class="ios-icon" style="background:var(--card2);">${t.icon}</span>
+      <div><p class="ios-title">${esc(t.name)}</p></div>
+      <span class="ios-chev" style="color:${t.amt>0?'#5c8f1d':'var(--ink)'}; font-weight:700; font-size:14px;">${t.amt>0?'+':'-'}${fmt(Math.abs(t.amt))}</span></div>`).join('');
+  } else {
+    $('acct-balance').textContent = key==='savings' ? '$24,610.03' : '$0.00';
+    $('acct-credit').textContent = key==='savings' ? '3.90% APY' : '$8,000 limit';
+    $('acct-miles').textContent = '—'; $('acct-tagged').textContent = '—';
+    $('acct-txns').innerHTML = `<div class="ios-row"><p class="ios-sub">Demo account — this build deep-dives Venture X.</p></div>`;
+  }
+}
+
+function creditChecking(amount, icon, name) { CHECK.bal += amount; CHECK.activity.unshift({icon, name, amt:amount}); renderWalletList(); }
+function debitChecking(amount, icon, name) { creditChecking(-amount, icon, name); }
+
+function payIncoming() {
+  incoming.status='paid'; debitChecking(incoming.amount,'⚡',`Zelle to ${incoming.from} — ${incoming.memo}`);
+  toastShow('⚡','Sent via Zelle®', `${fmt(incoming.amount)} to ${incoming.from}`);
+  $('home-zelle-incoming').style.display='none';
+}
+function declineIncoming() { incoming.status='declined'; $('home-zelle-incoming').style.display='none'; toastShow('⚡','Request declined',''); }
+
+/* ═══════════ PLAN ═══════════ */
+let hotelBooked = {}; // per trip
+function renderPlan() {
+  const T = TRIPS[curTrip], st = S[curTrip];
+  $('plan-hero').textContent = `${T.heroWord}, drawn.`;
+  $('plan-dates').textContent = `${T.dates} · with ${T.mate}`;
+
+  const hotel = hotelBooked[curTrip];
+  $('plan-travel').innerHTML = hotel ? `
+    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+      <div><p class="fr" style="font-size:18px; font-weight:600; margin:0 0 2px;">${esc(hotel.name)}</p>
+      <p class="mut" style="font-size:12px; margin:0;">Booked via Capital One Travel · 10x miles</p></div>
+      <span class="chip" style="background:rgba(159,211,86,.16); color:#5c8f1d;">Armed ✓</span>
+    </div>` : `
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+      <div><p style="font-size:15px; font-weight:700; margin:0 0 2px;">Where are you staying?</p>
+      <p class="mut" style="font-size:12px; margin:0;">Booking arms City Key before you land.</p></div>
+      <button class="btn btn-fill" style="white-space:nowrap;" onclick="openHotelSheet()">Find hotel</button>
+    </div>`;
+
+  $('plan-shopping').innerHTML = T.shopping.map((s,i) => `
+    <div class="card" style="min-width:130px; flex-shrink:0;">
+      <p style="font-size:22px; margin:0 0 6px;">${s.icon}</p>
+      <p style="font-size:12.5px; font-weight:700; margin:0 0 2px; line-height:1.25;">${esc(s.name)}</p>
+      <p class="mut" style="font-size:11px; margin:0 0 8px;">on ${esc(s.retailer)}</p>
+      <button class="btn btn-tint btn-block" style="font-size:12px; padding:7px;" onclick="buyShopping('${curTrip}',${i})">Buy · $${s.price}</button>
+    </div>`).join('');
+
+  $('plan-itinerary').innerHTML = T.days.map((day, di) => `
+    <p class="section-label">${esc(day.label)}</p>
+    <div class="ios-list" style="margin-bottom:6px;">
+      ${day.stops.map((stop, si) => `
+        <div class="ios-row" style="cursor:default;">
+          <span class="ios-icon" style="background:var(--card2); font-size:11px; font-weight:700;">${esc(stop.time)}</span>
+          <div style="flex:1;">
+            <p class="ios-title">${esc(stop.title)}</p>
+            <p class="ios-sub">${esc(stop.sub)}</p>
+            ${stop.status==='book' ? `<button class="btn btn-tint" style="margin-top:6px; padding:6px 12px; font-size:12px;" onclick="bookStop('${curTrip}',${di},${si})">Book · C1 Travel</button>` : ''}
+            ${stop.status==='bookedNow' ? `<p style="font-size:11px; font-weight:700; color:#5c8f1d; margin:4px 0 0;">Booked ✓ · 5x miles</p>` : ''}
+          </div>
+          ${stop.status==='booked' ? `<span class="chip" style="background:rgba(159,211,86,.16); color:#5c8f1d;">✓</span>` : ''}
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+function openHotelSheet() {
+  const T = TRIPS[curTrip];
+  $('sheet-body').innerHTML = `
+    <p style="font-size:17px; font-weight:800; margin:0 0 4px;">Hotels in ${esc(T.city)}</p>
+    <p class="mut" style="font-size:12px; margin:0 0 14px;">Capital One Travel · $300 annual travel credit auto-applies.</p>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      ${T.hotels.map(h => `
+        <div class="card" style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+          <div><p style="font-size:14px; font-weight:700; margin:0;">${esc(h.name)}</p>
+          <p class="mut" style="font-size:11.5px; margin:2px 0 0;">${h.tier} · $${h.nightly}/night · 10x miles</p></div>
+          <button class="btn btn-fill" style="font-size:12px; padding:8px 14px; white-space:nowrap;" onclick="bookHotel('${h.id}')">Book</button>
+        </div>`).join('')}
+    </div>`;
+  $('sheet-backdrop').classList.add('show'); $('sheet').classList.add('show');
+}
+
+function bookHotel(id) {
+  const T = TRIPS[curTrip];
+  const h = T.hotels.find(x=>x.id===id);
+  hotelBooked[curTrip] = h;
+  armTrip(curTrip);
+  closeSheet();
+  toastShow('🏨','Booked via Capital One Travel', `${h.name} · City Key armed for ${T.city}`);
+  renderPlan();
+}
+
+function bookStop(tripKey, di, si) {
+  const stop = TRIPS[tripKey].days[di].stops[si];
+  stop.status = 'bookedNow';
+  toastShow('🎟️','Booked via Capital One Travel', `${stop.title} · 5x miles earned`);
+  renderPlan();
+}
+
+function buyShopping(tripKey, i) {
+  const item = TRIPS[tripKey].shopping[i];
+  toastShow('🅿️', `Bought on ${item.retailer}`, `${item.name} · Paid with Paze`);
+}
+
+/* ═══════════ CITY KEY / LIVE ═══════════ */
+function armTrip(tripKey) {
+  const st = S[tripKey];
+  if (st.active || st.armed) return;
+  st.armed = true;
+  toastShow('🗝️','City Key armed', `Armed for ${TRIPS[tripKey].city} — ignites at check-in`);
+  if (curTab==='live') renderLive();
+}
+
+function renderLive() {
+  const T = TRIPS[curTrip], st = S[curTrip];
+  const active = liveTrip && st.active;
+  if (!active) {
+    if (st.armed && hotelBooked[curTrip]) {
+      $('live-hero').textContent = `${T.heroWord}, armed.`;
+      $('live-sub').textContent = `Base Camp is set at ${hotelBooked[curTrip].name}. Ignites at check-in.`;
+    } else {
+      $('live-hero').textContent = `${T.heroWord}, asleep.`;
+      $('live-sub').textContent = 'The line is dark. Open the simulator to ignite it.';
+    }
+    $('live-rail').style.display='none';
+    $('live-line-wrap').style.display='none';
+    return;
+  }
+  $('live-hero').textContent = `${T.heroWord}, alive.`;
+  $('live-sub').textContent = 'The line is lit. Every swipe moves you toward the next station.';
+  $('live-rail').style.display='block';
+  $('live-line-wrap').style.display='block';
+  $('live-spend').textContent = fmt0(st.spend);
+  const next = T.tiers.find(t => st.spend < t.threshold);
+  if (next) { $('live-bar').style.width = Math.min(100, st.spend/next.threshold*100)+'%'; $('live-next').textContent = `${fmt0(next.threshold-st.spend)} to Station ${next.id}`; }
+  else { $('live-bar').style.width='100%'; $('live-next').textContent = 'All unlocked 🎉'; }
+
+  const events = [
+    ...T.tiers.map(t=>({kind:'tier',pos:t.threshold,t})),
+    ...st.swipes.map(s=>({kind:'swipe',pos:s.cum,s})),
+  ].sort((a,b)=>a.pos-b.pos || (a.kind==='swipe'?1:-1));
+
+  let rows = `<div class="tl-item"><div class="tl-dot" style="border-color:var(--accent);"></div><p style="font-size:12px; font-weight:700; margin:0;">Origin</p><p class="mut" style="font-size:11.5px; margin:2px 0 0;">Ignition — first swipe in market ${T.zip}</p></div>`;
+  events.forEach(ev => {
+    if (ev.kind==='swipe') {
+      const s=ev.s;
+      rows += `<div class="tl-item"><div class="tl-dot swipe"></div>
+        <div class="card" style="padding:11px 13px; display:flex; justify-content:space-between; align-items:center;">
+          <div><p style="font-size:13px; font-weight:700; margin:0;">${esc(s.icon)} ${esc(s.merchant)}</p><p class="mut" style="font-size:11px; margin:2px 0 0;">${esc(s.note)}</p></div>
+          <p style="font-size:13px; font-weight:800; margin:0;">${fmt(s.amount)}</p>
+        </div></div>`;
+    } else {
+      const t=ev.t, unlocked = st.spend >= t.threshold, claimed = st.claimed.has(t.id);
+      rows += `<div class="tl-item"><div class="tl-dot ${unlocked?'on':''}"></div>
+        <p style="font-size:12px; font-weight:700; margin:0; color:${unlocked?'#5c8f1d':'var(--faint)'};">Station ${t.id} · $${t.threshold} ${unlocked?'· unlocked':'· locked'}</p>
+        <p style="font-size:14px; font-weight:700; margin:2px 0 4px;">${t.emoji} ${esc(t.title)} — ${esc(t.reward)}</p>
+        ${unlocked ? (claimed ? `<p style="font-size:11.5px; color:#5c8f1d; font-weight:700; margin:0;">Claimed ✓</p>` : `<button class="btn" style="background:#79a83e; color:#fff; padding:6px 14px; font-size:12px;" onclick="claimTier(${t.id})">Claim</button>`) : `<p class="mut" style="font-size:11.5px; margin:0;">merchant-funded · auto-unlocks</p>`}
+      </div>`;
+    }
+  });
+  $('tl-rows').innerHTML = rows;
+  requestAnimationFrame(computeFill);
+}
+
+function computeFill() {
+  const wrap = $('tl-wrap'); if (!wrap || wrap.offsetParent===null) return;
+  const track = wrap.querySelector('.tl-track');
+  if (!track) return;
+  const st = S[curTrip], T = TRIPS[curTrip];
+  const maxTier = T.tiers[T.tiers.length-1].threshold;
+  const pct = Math.min(1, st.spend / maxTier);
+  $('tl-fill').style.height = (track.offsetHeight * pct) + 'px';
+}
+window.addEventListener('resize', () => curTab==='live' && computeFill());
+
+function claimTier(id) {
+  const st = S[curTrip], T = TRIPS[curTrip];
+  st.claimed.add(id);
+  const t = T.tiers.find(x=>x.id===id);
+  toastShow('🎁','Reward claimed', `${t.title} — ${t.reward}`);
+  renderLive();
+}
+
+/* ═══════════ SIMULATOR ═══════════ */
+function fireHomeSwipe() {
+  toastShow('☕','Starbucks — $4.50', 'Home-market swipe. Nothing wakes.');
+  closeSheet();
+}
+
+function fireIgnition() {
+  if (fired.ignite) return;
+  fired.ignite = true;
+  liveTrip = curTrip;
+  const T = TRIPS[liveTrip], st = S[liveTrip], sc = T.script.ign;
+  const wasArmed = st.armed;
+  closeSheet();
+
+  $('splash-zip').textContent = wasArmed ? 'CHECK-IN CONFIRMED' : `OUT-OF-MARKET SWIPE · ${T.zip}`;
+  $('splash-welcome').textContent = T.welcome;
+  $('splash').classList.add('show');
+
+  setTimeout(() => {
+    $('splash').classList.remove('show');
+    $('screen').classList.add('night');
+    $('skyline').textContent = T.tower;
+    st.active = true; st.spend = sc.amount;
+    st.swipes.push({merchant: wasArmed && hotelBooked[liveTrip] ? hotelBooked[liveTrip].name : sc.merchant, amount:sc.amount, cum:sc.amount, icon:sc.icon, note:sc.note});
+    $('home-ck-icon').style.background='rgba(2,118,177,.16)'; $('home-ck-icon').textContent='🗝️';
+    $('home-ck-title').textContent = `Live in ${T.city}`; $('home-ck-title').classList.add('acc');
+    $('home-ck-sub').textContent = 'The line is lit — tap to view';
+    $('tab-live-label').textContent = 'Live';
+    goTab('live');
+    toastShow('🗝️','City Key activated', `Station 1 reached — ${T.tiers[0].reward.toLowerCase()}`);
+  }, 2200);
+}
+
+function fireProgress() {
+  if (fired.s2 || !liveTrip) return; fired.s2 = true;
+  const T = TRIPS[liveTrip], st = S[liveTrip], sc = T.script.s2;
+  st.spend += sc.amount;
+  st.swipes.push({merchant:sc.merchant, amount:sc.amount, cum:st.spend, icon:sc.icon, note:sc.note});
+  closeSheet(); goTab('live');
+  toastShow('📈', `${sc.merchant} — ${fmt(sc.amount)}`, 'Getting closer to the next station');
+}
+
+function fireTier() {
+  if (fired.s3 || !liveTrip) return; fired.s3 = true;
+  const T = TRIPS[liveTrip], st = S[liveTrip], sc = T.script.s3;
+  st.spend += sc.amount;
+  st.swipes.push({merchant:sc.merchant, amount:sc.amount, cum:st.spend, icon:sc.icon, note:sc.note});
+  closeSheet(); goTab('live');
+  toastShow('🏆','Station 2 unlocked', `${T.tiers[1].title} — ${T.tiers[1].reward}`);
+}
+
+function fireReturn() {
+  if (fired.ret || !liveTrip) return; fired.ret = true;
+  const st = S[liveTrip];
+  st.settled = true;
+  closeSheet();
+  $('screen').classList.remove('night');
+  openWrap();
+}
+
+/* ═══════════ WRAP ═══════════ */
+function openWrap() {
+  const T = TRIPS[liveTrip], st = S[liveTrip];
+  const stations = T.tiers.filter(t=>st.spend>=t.threshold).length;
+  const miles = Math.round(st.spend*2);
+  $('wrap-kicker').textContent = `Trip settled`;
+  $('wrap-title').textContent = `${T.heroWord}, wrapped.`;
+  $('wrap-airports').textContent = T.wrapAirports;
+  $('wrap-place').textContent = `${T.wrapPlace} · with ${T.mate}`;
+  $('wrap-spend').textContent = fmt0(st.spend);
+  $('wrap-miles').textContent = miles.toLocaleString();
+  $('wrap-stations').textContent = stations + '/3';
+  $('wrap-share').textContent = '100%';
+
+  const perPerson = st.spend/2;
+  const req = st.zelle[0];
+  $('wrap-split').innerHTML = `
+    <p class="section-label">Split this trip · Zelle®</p>
+    <div class="card">
+      <p style="font-size:13px; font-weight:600; margin:0 0 10px;">You fronted ${fmt0(st.spend)} · ${T.mate} owes ${fmt0(perPerson)}</p>
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="width:30px;height:30px;border-radius:50%;background:#013d5b;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;">${T.mate[0]}</span>
+          <p style="font-size:13px; font-weight:700; margin:0;">${T.mate}</p>
+        </div>
+        ${req && req.status==='received'
+          ? `<span class="chip" style="background:rgba(159,211,86,.16); color:#5c8f1d;">Paid ✓</span>`
+          : req && req.status==='requested'
+          ? `<span class="chip" style="background:rgba(245,158,11,.16); color:#b45309;">Pending</span>`
+          : `<button class="btn" style="background:#6d1ed4; color:#fff; padding:8px 14px; font-size:12px;" onclick="requestZelle()">Request ${fmt0(perPerson)}</button>`}
+      </div>
+    </div>`;
+
+  $('wrap-modal').classList.add('show');
+}
+function requestZelle() {
+  const st = S[liveTrip];
+  st.zelle.push({to:TRIPS[liveTrip].mate, amount: st.spend/2, status:'requested'});
+  toastShow('⚡','Request sent', `${TRIPS[liveTrip].mate} — via Zelle®`);
+  openWrap();
+}
+function simZelle() {
+  const st = S[liveTrip || curTrip];
+  const req = st.zelle.find(r=>r.status==='requested');
+  if (!req) { toastShow('🔔','Nothing pending',''); return; }
+  req.status = 'received';
+  creditChecking(req.amount, '⚡', `Zelle from ${req.to}`);
+  toastShow('⚡',`${req.to} paid you back`, `${fmt(req.amount)} into 360 Checking`);
+  closeSheet();
+  if ($('wrap-modal').classList.contains('show')) openWrap();
+}
+function closeWrap() { $('wrap-modal').classList.remove('show'); goTab('home'); }
+
+/* ── init ── */
+renderWalletList();
+if (incoming.status==='pending') $('home-zelle-incoming').style.display='block';
+goTab('home');
+</script>
+</body>
+</html>

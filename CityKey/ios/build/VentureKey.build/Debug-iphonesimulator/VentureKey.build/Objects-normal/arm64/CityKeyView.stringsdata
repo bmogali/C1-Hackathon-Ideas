@@ -1,0 +1,144 @@
+{
+  "source": "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/CityKeyView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Armed for %@",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 46
+        }
+      },
+      {
+        "comment": "",
+        "key": "The line is dark",
+        "location": {
+          "startingColumn": 68,
+          "startingLine": 46
+        }
+      },
+      {
+        "comment": "",
+        "key": "A Capital One Travel booking told us where and when — no GPS, no check-ins needed.",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 50
+        }
+      },
+      {
+        "comment": "",
+        "key": "City Key ignites on your first out-of-market card swipe. No itinerary needed. No GPS.",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 51
+        }
+      },
+      {
+        "comment": "",
+        "key": "Destination spend",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 66
+        }
+      },
+      {
+        "comment": "",
+        "key": "All stations unlocked",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 77
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ to Station %lld",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 73
+        }
+      },
+      {
+        "comment": "",
+        "key": "Ignition — first swipe in market %@",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 252
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ — %@",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 275
+        }
+      },
+      {
+        "comment": "",
+        "key": "Merchant-funded · unlocks from the auth stream",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 290
+        }
+      },
+      {
+        "comment": "",
+        "key": "Claimed · show code in store",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 280
+        }
+      },
+      {
+        "comment": "",
+        "key": "Claim reward",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 284
+        }
+      },
+      {
+        "comment": "",
+        "key": "Something the city doesn't sell",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 328
+        }
+      },
+      {
+        "comment": "",
+        "key": "Keep moving down the line — reserved for Venture X · Velocity Black",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 332
+        }
+      },
+      {
+        "comment": "",
+        "key": "On your plan — concierge will confirm timing",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 313
+        }
+      },
+      {
+        "comment": "",
+        "key": "Accept",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 319
+        }
+      },
+      {
+        "comment": "",
+        "key": "Ask the concierge",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 321
+        }
+      }
+    ]
+  },
+  "version": 1
+}

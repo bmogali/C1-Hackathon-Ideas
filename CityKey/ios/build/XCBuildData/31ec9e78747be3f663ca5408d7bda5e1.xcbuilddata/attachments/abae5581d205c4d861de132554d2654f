@@ -1,0 +1,139 @@
+{
+  "" : {
+    "diagnostics" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VentureKey-primary.dia",
+    "emit-module-dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VentureKey-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VentureKey-primary-emit-module.dia",
+    "pch" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VentureKey-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VentureKey-primary.swiftdeps"
+  },
+  "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/AppState.swift" : {
+    "const-values" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/AppState.swiftconstvalues",
+    "dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/AppState.d",
+    "diagnostics" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/AppState.dia",
+    "index-unit-output-path" : "/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/AppState.o",
+    "llvm-bc" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/AppState.bc",
+    "object" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/AppState.o",
+    "swift-dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/AppState.swiftdeps",
+    "swiftmodule" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/AppState~partial.swiftmodule"
+  },
+  "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/CityKeyView.swift" : {
+    "const-values" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/CityKeyView.swiftconstvalues",
+    "dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/CityKeyView.d",
+    "diagnostics" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/CityKeyView.dia",
+    "index-unit-output-path" : "/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/CityKeyView.o",
+    "llvm-bc" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/CityKeyView.bc",
+    "object" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/CityKeyView.o",
+    "swift-dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/CityKeyView.swiftdeps",
+    "swiftmodule" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/CityKeyView~partial.swiftmodule"
+  },
+  "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/Compat.swift" : {
+    "const-values" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Compat.swiftconstvalues",
+    "dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Compat.d",
+    "diagnostics" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Compat.dia",
+    "index-unit-output-path" : "/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Compat.o",
+    "llvm-bc" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Compat.bc",
+    "object" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Compat.o",
+    "swift-dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Compat.swiftdeps",
+    "swiftmodule" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Compat~partial.swiftmodule"
+  },
+  "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/HomeView.swift" : {
+    "const-values" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/HomeView.swiftconstvalues",
+    "dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/HomeView.d",
+    "diagnostics" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/HomeView.dia",
+    "index-unit-output-path" : "/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/HomeView.o",
+    "llvm-bc" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/HomeView.bc",
+    "object" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/HomeView.o",
+    "swift-dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/HomeView.swiftdeps",
+    "swiftmodule" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/HomeView~partial.swiftmodule"
+  },
+  "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/Models.swift" : {
+    "const-values" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Models.swiftconstvalues",
+    "dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Models.d",
+    "diagnostics" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Models.dia",
+    "index-unit-output-path" : "/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Models.o",
+    "llvm-bc" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Models.bc",
+    "object" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Models.o",
+    "swift-dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Models.swiftdeps",
+    "swiftmodule" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Models~partial.swiftmodule"
+  },
+  "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/PlanView.swift" : {
+    "const-values" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/PlanView.swiftconstvalues",
+    "dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/PlanView.d",
+    "diagnostics" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/PlanView.dia",
+    "index-unit-output-path" : "/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/PlanView.o",
+    "llvm-bc" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/PlanView.bc",
+    "object" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/PlanView.o",
+    "swift-dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/PlanView.swiftdeps",
+    "swiftmodule" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/PlanView~partial.swiftmodule"
+  },
+  "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/SimulatorSheet.swift" : {
+    "const-values" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SimulatorSheet.swiftconstvalues",
+    "dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SimulatorSheet.d",
+    "diagnostics" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SimulatorSheet.dia",
+    "index-unit-output-path" : "/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SimulatorSheet.o",
+    "llvm-bc" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SimulatorSheet.bc",
+    "object" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SimulatorSheet.o",
+    "swift-dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SimulatorSheet.swiftdeps",
+    "swiftmodule" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SimulatorSheet~partial.swiftmodule"
+  },
+  "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/SplashAndWrap.swift" : {
+    "const-values" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SplashAndWrap.swiftconstvalues",
+    "dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SplashAndWrap.d",
+    "diagnostics" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SplashAndWrap.dia",
+    "index-unit-output-path" : "/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SplashAndWrap.o",
+    "llvm-bc" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SplashAndWrap.bc",
+    "object" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SplashAndWrap.o",
+    "swift-dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SplashAndWrap.swiftdeps",
+    "swiftmodule" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/SplashAndWrap~partial.swiftmodule"
+  },
+  "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/Theme.swift" : {
+    "const-values" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Theme.swiftconstvalues",
+    "dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Theme.d",
+    "diagnostics" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Theme.dia",
+    "index-unit-output-path" : "/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Theme.o",
+    "llvm-bc" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Theme.bc",
+    "object" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Theme.o",
+    "swift-dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Theme.swiftdeps",
+    "swiftmodule" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/Theme~partial.swiftmodule"
+  },
+  "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/VelocityBlackSheet.swift" : {
+    "const-values" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VelocityBlackSheet.swiftconstvalues",
+    "dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VelocityBlackSheet.d",
+    "diagnostics" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VelocityBlackSheet.dia",
+    "index-unit-output-path" : "/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VelocityBlackSheet.o",
+    "llvm-bc" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VelocityBlackSheet.bc",
+    "object" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VelocityBlackSheet.o",
+    "swift-dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VelocityBlackSheet.swiftdeps",
+    "swiftmodule" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VelocityBlackSheet~partial.swiftmodule"
+  },
+  "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/VentureKeyApp.swift" : {
+    "const-values" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VentureKeyApp.swiftconstvalues",
+    "dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VentureKeyApp.d",
+    "diagnostics" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VentureKeyApp.dia",
+    "index-unit-output-path" : "/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VentureKeyApp.o",
+    "llvm-bc" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VentureKeyApp.bc",
+    "object" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VentureKeyApp.o",
+    "swift-dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VentureKeyApp.swiftdeps",
+    "swiftmodule" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/VentureKeyApp~partial.swiftmodule"
+  },
+  "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/WalletViews.swift" : {
+    "const-values" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/WalletViews.swiftconstvalues",
+    "dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/WalletViews.d",
+    "diagnostics" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/WalletViews.dia",
+    "index-unit-output-path" : "/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/WalletViews.o",
+    "llvm-bc" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/WalletViews.bc",
+    "object" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/WalletViews.o",
+    "swift-dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/WalletViews.swiftdeps",
+    "swiftmodule" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/WalletViews~partial.swiftmodule"
+  },
+  "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/build/VentureKey.build/Debug-iphonesimulator/VentureKey.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  }
+}

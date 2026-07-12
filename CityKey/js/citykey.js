@@ -4,6 +4,11 @@ function setSimTrip(key) {
   if (liveTrip) return;
   simTrip = key;
   renderSimToggle(); renderSimLabels(); renderLiveHeader();
+  if (key !== 'standalone') {
+    viewTrip = key;
+    renderTripSwitch();
+    if (curScreen === 'plan') renderPlan();
+  }
 }
 function renderSimToggle() {
   $('sim-city-toggle').innerHTML = Object.values(TRIPS).map((T) =>
@@ -31,20 +36,85 @@ function renderSimLabels() {
   $('lbl-swipe3b').textContent = `$${s.s3.amount}`;
 }
 
+/* ═══════════ CAPITAL ONE TRAVEL × CITY KEY · ARMED state ═══════════
+   A portal hotel/flight booking is first-party Capital One data — it tells
+   us destination MSA + arrival window before a single card swipe happens.
+   That lets City Key pre-arm instead of waiting cold for ignition. */
+function armTrip(tripKey) {
+  const T = TRIPS[tripKey], S = tripState[tripKey];
+  if (S.active) {
+    if (!S.hotelAnnounced) {
+      S.hotelAnnounced = true;
+      toast('🏨', 'Base Camp added', `${T.city} now has a hotel on the line`, 'brand');
+    }
+    if (liveTrip === tripKey) renderLine();
+    return;
+  }
+  if (S.armed) return;
+  S.armed = true;
+  console.log(`[CityKey] booking.confirmed → trip_id:${T.id} ARMED (MSA ${T.zip}, arrival ${T.dates})`);
+  toast('🗝️', 'City Key armed', `Armed for ${T.city} — ignites at check-in or your first swipe`, 'brand');
+}
+
 /* ═══════════ THE LINE ═══════════ */
+function renderDormantCard() {
+  const box = $('live-dormant');
+  const key = liveTrip || simTrip;
+  if (key === 'standalone') {
+    box.innerHTML = `
+      <p class="text-5xl grayscale opacity-50">🎲</p>
+      <p class="text-xl font-bold mt-5">The line is dark. No plan exists.</p>
+      <p class="mut text-sm mt-2 max-w-sm mx-auto leading-relaxed">
+        City Key ignites on your <b class="txt">first out-of-market card swipe</b> — no itinerary, no GPS, no hotel booking required.
+        Fire “✈️ First Out-of-Town Swipe” and watch it provision itself from MSA + MCC alone.
+      </p>`;
+    return;
+  }
+  const T = TRIPS[key], S = tripState[key];
+  if (S.armed && S.hotel) {
+    box.innerHTML = `
+      <p class="text-5xl">🏨</p>
+      <p class="text-xl font-bold mt-5">Base Camp is set.</p>
+      <p class="mut text-sm mt-2 max-w-md mx-auto leading-relaxed">
+        <b class="txt">${esc(S.hotel.name)}</b> · ${S.hotel.nights} nights, booked via Capital One Travel.
+        City Key is <b class="acc">armed</b> for ${esc(T.city)} — it ignites automatically at check-in, or on your first swipe, whichever comes first.
+      </p>
+      <div class="mt-4 inline-block rounded-xl srf2 px-4 py-3 text-left">
+        <p class="text-[10px] font-bold uppercase tracking-widest fnt">Base Camp perk</p>
+        <p class="text-sm font-bold mt-1 max-w-xs">${esc(T.basePerk.desc)}</p>
+      </div>`;
+    return;
+  }
+  box.innerHTML = `
+    <p class="text-5xl grayscale opacity-50">🗝️</p>
+    <p class="text-xl font-bold mt-5">The line is dark.</p>
+    <p class="mut text-sm mt-2 max-w-sm mx-auto leading-relaxed">
+      City Key ignites on your <b class="txt">first out-of-market card swipe</b>. No itinerary needed. No GPS.
+      Book a hotel in the planner to arm it early, or pick a city in the simulator and fire “✈️ First Out-of-Town Swipe”.
+    </p>`;
+}
+
 function renderLiveHeader() {
-  if (!liveTrip && simTrip === 'standalone') {
+  const key = liveTrip || simTrip;
+  if (key === 'standalone') {
     $('live-kicker').textContent = 'Standalone mode · no plan required';
     $('live-hero').innerHTML = 'Anywhere, <em>asleep.</em>';
     $('live-sub').textContent = "City Key doesn't need the planner. The first out-of-market swipe — any city, any merchant — provisions the whole game from the auth stream alone.";
+    renderDormantCard();
     return;
   }
-  const key = liveTrip || simTrip;
   const T = TRIPS[key], S = tripState[key];
   if (!liveTrip || !S.active) {
-    $('live-kicker').textContent = 'Awaiting ignition';
-    $('live-hero').innerHTML = `${esc(T.heroWord)}, <em>asleep.</em>`;
-    $('live-sub').textContent = 'The line is dark. Your first out-of-market swipe lights it — straight off the card auth stream.';
+    if (S.armed && S.hotel) {
+      $('live-kicker').textContent = `Armed for ${T.city}`;
+      $('live-hero').innerHTML = `${esc(T.heroWord)}, <em>armed.</em>`;
+      $('live-sub').textContent = `Base Camp is set at ${S.hotel.name}. City Key ignites automatically at check-in — or on your first swipe, whichever comes first.`;
+    } else {
+      $('live-kicker').textContent = 'Awaiting ignition';
+      $('live-hero').innerHTML = `${esc(T.heroWord)}, <em>asleep.</em>`;
+      $('live-sub').textContent = 'The line is dark. Your first out-of-market swipe lights it — straight off the card auth stream.';
+    }
+    renderDormantCard();
   } else {
     $('live-kicker').textContent = `City Key · live in ${T.city}`;
     $('live-hero').innerHTML = `${esc(T.heroWord)}, <em>alive.</em>`;
@@ -57,7 +127,7 @@ function renderLiveHeader() {
       alone.innerHTML = `
         <div class="rounded-xl srf2 px-3.5 py-3">
           <p class="text-[11px] mut leading-snug"><b class="txt">Standalone session.</b> No itinerary existed — City Key provisioned everything from MSA ${T.zip} + MCC. The planner is optional.</p>
-          <button onclick="setViewTrip('${T.key}'); go('plan')" class="mt-2.5 rounded-full bg-c1blue hover:bg-[#026597] text-white text-xs font-bold px-4 py-2 transition-colors">📝 Draw a plan for this trip →</button>
+          <button onclick="setViewTrip('${T.key}'); go('plan')" class="mt-2.5 rounded-full bg-c1blue hover:bg-[#026597] text-white text-xs font-bold px-4 py-2 transition-colors">📝 Draw a plan or book a hotel →</button>
         </div>`;
     } else alone.classList.add('hidden');
   }
@@ -66,21 +136,45 @@ function renderLiveHeader() {
 function renderLine(newTierIds = []) {
   const T = TRIPS[liveTrip], S = tripState[liveTrip];
   const rows = [];
-  rows.push(`
-    <div class="relative grid grid-cols-[64px_1fr] pb-7">
-      <div class="flex justify-center pt-1"><span class="lnode h-4 w-4 rounded-full border-[3px]" data-pos="0"
-        style="border-color: var(--accent); background: var(--bg);"></span></div>
-      <div class="pt-0.5"><p class="microlabel fnt">Origin · ${T.standalone ? 'no itinerary on file' : 'Home base VA'}</p>
-      <p class="text-sm font-bold mut mt-0.5">${T.standalone ? `Auto-provisioned from MSA ${T.zip} + MCC — nothing was planned` : `Ignition — first swipe in market ${T.zip}`}</p></div>
-    </div>`);
+  if (S.hotel) {
+    rows.push(`
+      <div class="relative grid grid-cols-[64px_1fr] pb-7">
+        <div class="flex justify-center pt-1"><span class="lnode h-8 w-8 rounded-full flex items-center justify-center text-sm" data-pos="0"
+          style="background: var(--accent); color:#fff;">🏨</span></div>
+        <div class="pt-1"><p class="microlabel acc">Base Camp · ${esc(S.hotel.name)}</p>
+        <p class="text-sm font-bold mut mt-0.5">${S.hotel.nights} nights via Capital One Travel · 10x miles${T.standalone ? ' · booked mid-trip' : ''}</p></div>
+      </div>`);
+  } else {
+    rows.push(`
+      <div class="relative grid grid-cols-[64px_1fr] pb-7">
+        <div class="flex justify-center pt-1"><span class="lnode h-4 w-4 rounded-full border-[3px]" data-pos="0"
+          style="border-color: var(--accent); background: var(--bg);"></span></div>
+        <div class="pt-0.5"><p class="microlabel fnt">Origin · ${T.standalone ? 'no itinerary on file' : 'Home base VA'}</p>
+        <p class="text-sm font-bold mut mt-0.5">${T.standalone ? `Auto-provisioned from MSA ${T.zip} + MCC — nothing was planned` : `Ignition — first swipe in market ${T.zip}`}</p></div>
+      </div>`);
+  }
 
   const events = [
     ...T.tiers.map((t) => ({ kind: 'station', pos: t.threshold, t })),
     ...(T.vbStation ? [{ kind: 'black', pos: T.vbStation.threshold }] : []),
+    ...(T.basePerk ? [{ kind: 'basecamp', pos: T.basePerk.threshold }] : []),
     ...S.swipes.map((s) => ({ kind: 'swipe', pos: s.cum, s })),
   ].sort((a, b) => a.pos - b.pos || (a.kind === 'swipe' ? 1 : -1));
 
   for (const ev of events) {
+    if (ev.kind === 'basecamp') {
+      const unlocked = S.spend >= T.basePerk.threshold;
+      rows.push(`
+        <div class="relative grid grid-cols-[64px_1fr] pb-7">
+          <div class="flex justify-center"><span class="lnode station ${unlocked ? 'unlocked anim-ping' : ''}" data-pos="${T.basePerk.threshold}">🏨</span></div>
+          <div class="pt-1 max-w-xl">
+            <p class="microlabel ${unlocked ? 'text-keyg' : 'fnt'}">Base Camp perk · ${fmt0(T.basePerk.threshold)} ${unlocked ? '· unlocked' : '· locked'}</p>
+            <p class="text-lg font-bold mt-0.5 ${unlocked ? '' : 'mut'}">${esc(T.basePerk.desc)}</p>
+            <p class="text-xs fnt mt-1.5">${unlocked ? 'hotel-funded · show your room key at check-in' : `funded by ${esc(S.hotel.name)} · unlocks automatically`}</p>
+          </div>
+        </div>`);
+      continue;
+    }
     if (ev.kind === 'black') {
       const bs = T.vbStation;
       const unlocked = S.spend >= bs.threshold;
@@ -220,6 +314,7 @@ function fireIgnition() {
   if (simTrip === 'standalone') simTrip = provisionStandalone();
   liveTrip = simTrip;
   const T = TRIPS[liveTrip], S = tripState[liveTrip], sc = T.script.ign;
+  const wasArmed = S.armed && S.hotel;
   $('btn-ignite').disabled = true;
   $('btn-home-swipe').disabled = true;
   renderSimToggle(); renderHomeTrips(); renderTripSwitch();
@@ -227,10 +322,12 @@ function fireIgnition() {
   logEvent({ amount: sc.amount, merchant: sc.logName, mcc: sc.mcc, zip: T.zip },
     { text: T.standalone
         ? `${T.zip} ≠ 20120 · no itinerary on file → 🗝️ CITY KEY AUTO-PROVISIONED · MSA: ${T.city}`
+        : wasArmed
+        ? `${T.zip} ≠ 20120 · trip ARMED via Capital One Travel → 🗝️ CITY KEY LIVE · MSA: ${T.city}`
         : `${T.zip} ≠ 20120 → 🗝️ CITY KEY ACTIVATED · MSA: ${T.city}`, color: 'text-key font-bold' });
 
-  $('splash-zip').textContent = `out-of-market swipe · zip ${T.zip} ≠ 20120`;
-  $('splash-welcome').textContent = `City Key activated · ${T.welcome}`;
+  $('splash-zip').textContent = wasArmed ? `check-in swipe · Base Camp confirmed` : `out-of-market swipe · zip ${T.zip} ≠ 20120`;
+  $('splash-welcome').textContent = wasArmed ? `Check-in confirmed · ${T.welcome} · Base Camp is live` : `City Key activated · ${T.welcome}`;
   $('splash-txn').textContent = `${sc.merchant} · ${fmt(sc.amount)}`;
   $('splash-meta').textContent = `MSA ${T.city} · MCC ${sc.mcc} · city_key_active: true${T.standalone ? ' · itinerary: none — self-provisioned' : ''}`;
   const splash = $('splash');
@@ -243,10 +340,12 @@ function fireIgnition() {
     document.body.classList.add('night');
     $('tower').textContent = T.tower;
 
+    const ignMerchant = wasArmed ? S.hotel.name : sc.merchant;
+    const ignDesc = wasArmed ? 'Check-in incidental · Base Camp confirmed' : 'Ignition swipe · City Key activated';
     S.active = true;
     S.spend = sc.amount;
-    S.swipes.push({ merchant: sc.merchant, amount: sc.amount, cum: sc.amount, icon: sc.icon, time: sc.time, note: sc.note });
-    addTxn({ icon: sc.icon, merchant: sc.merchant, desc: 'Ignition swipe · City Key activated', date: sc.date, amount: sc.amount, mcc: sc.mcc, category: 'Lodging', location: sc.location, miles: sc.amount * 2, tag: { trip: liveTrip, mode: 'auto' } });
+    S.swipes.push({ merchant: ignMerchant, amount: sc.amount, cum: sc.amount, icon: sc.icon, time: sc.time, note: sc.note });
+    addTxn({ icon: sc.icon, merchant: ignMerchant, desc: ignDesc, date: sc.date, amount: sc.amount, mcc: sc.mcc, category: 'Lodging', location: sc.location, miles: sc.amount * 2, tag: { trip: liveTrip, mode: 'auto' } });
 
     $('mode-text').innerHTML = `<span class="inline-block h-1.5 w-1.5 rounded-full bg-c1red live-dot align-middle mr-1.5"></span>Live · ${T.city}`;
     $('home-ck').innerHTML = `🗝️ <span class="acc">Live in ${T.city}</span> — the line is lit`;
@@ -263,7 +362,55 @@ function fireIgnition() {
     toast('🗝️', 'City Key activated', `Station 1 reached — ${t1.reward.toLowerCase()} unlocked ${t1.emoji}`, 'brand');
     $('btn-swipe2').disabled = false;
     $('btn-return').disabled = false;
+    $('btn-folio').disabled = false;
   }, 3000);
+}
+
+/* ── hotel folio · F4 the merchant-funded flywheel ──
+   Incidentals charged directly to the hotel (not the C1 Travel portal)
+   earn Venture X's base 2x, same as any other card swipe. */
+function fireFolioSwipe() {
+  if (!liveTrip) return;
+  const T = TRIPS[liveTrip], S = tripState[liveTrip];
+  if (S.folioCount >= 3) { toast('🛎️', 'Quiet at the hotel', 'No more incidentals to charge right now.'); return; }
+  S.folioCount++;
+  const hotelName = S.hotel ? S.hotel.name : T.script.ign.merchant;
+  const amount = 28, cum = S.spend + amount;
+  logEvent({ amount, merchant: hotelName, mcc: '7011', zip: T.zip },
+    { text: `${fmt0(S.spend)} → ${fmt0(cum)} · hotel folio (MCC 7011)`, color: 'text-key' });
+  S.spend = cum;
+  S.swipes.push({ merchant: hotelName, amount, cum, icon: '🛎️', time: '—', note: 'MCC 7011 · minibar & incidentals' });
+  addTxn({ icon: '🛎️', merchant: hotelName, desc: 'Minibar & incidentals', date: T.script.s2.date, amount, mcc: '7011', category: 'Lodging', location: T.script.ign.location, miles: amount * 2, tag: { trip: liveTrip, mode: 'auto' } });
+  renderLine();
+  renderRail();
+  if (S.folioCount >= 3) $('btn-folio').disabled = true;
+  if (T.basePerk && cum >= T.basePerk.threshold) { toast('🏨', 'Base Camp perk unlocked', T.basePerk.desc, 'brand'); spawnConfetti(20); }
+  else toast('🛎️', `${hotelName} — $28.00`, 'Folio charge · counts toward every slab on the line', 'brand');
+}
+
+/* ── price drop protection · F3, two-step: detect then claim ── */
+function fireRateDrop() {
+  const key = liveTrip || simTrip;
+  if (key === 'standalone') { toast('📉', 'No hotel on file', 'Book a hotel via the planner to enable price protection.'); return; }
+  const T = TRIPS[key], S = tripState[key];
+  if (!S.hotel) { toast('📉', 'No hotel booked yet', `Book ${T.city}'s hotel via Capital One Travel first — then rates can drop in your favor.`); return; }
+  if (S.hotel.dropDetected) { toast('📉', 'Already watching', 'This stay already has a protection claim on file.'); return; }
+  S.hotel.dropDetected = true;
+  S.hotel.dropAmt = Math.round(S.hotel.total * 0.14);
+  console.log(`[C1Travel] price.dropped → booking:${S.hotel.name}, amount:$${S.hotel.dropAmt}`);
+  toast('📉', 'Rate drop detected', `${fmt0(S.hotel.dropAmt)} price-drop protection filed for ${S.hotel.name}`, 'brand');
+  if (curScreen === 'plan') renderPlan();
+}
+
+function claimProtection(tripKey) {
+  const T = TRIPS[tripKey], S = tripState[tripKey];
+  if (!S.hotel || !S.hotel.dropDetected || S.hotel.protectionClaimed) return;
+  S.hotel.protectionClaimed = true;
+  S.protectionAmt += S.hotel.dropAmt;
+  addTxn({ icon: '🛡️', merchant: 'Capital One Travel', desc: `Price drop protection · ${S.hotel.name}`, date: T.script.retDate, amount: -S.hotel.dropAmt, credit: true, mcc: '7011', category: 'Credit', location: 'capitalonetravel.com', miles: 0, tag: { trip: tripKey, mode: 'auto' } });
+  console.log(`[C1Travel] protection.claimed → trip_id:${T.id}, credit:$${S.hotel.dropAmt}`);
+  toast('🛡️', 'Protection credit posted', `${fmt0(S.hotel.dropAmt)} back for ${S.hotel.name}`, 'brand');
+  renderPlan();
 }
 
 function fireProgressSwipe() {
@@ -283,7 +430,11 @@ function fireProgressSwipe() {
   go('live');
   renderLine();
   renderRail();
-  toast('📈', `${sc.merchant} — ${fmt(sc.amount)}`, sc.toast, 'brand');
+  const next = T.tiers.find((t) => cum < t.threshold);
+  const progressMsg = next
+    ? `${Math.round((cum / next.threshold) * 100)}% to Station ${next.id} · ${fmt0(next.threshold - cum)} to go`
+    : 'Every station is within reach — check the line!';
+  toast('📈', `${sc.merchant} — ${fmt(sc.amount)}`, progressMsg, 'brand');
 }
 
 function fireTierSwipe() {
@@ -313,7 +464,7 @@ function fireTierSwipe() {
 function fireReturnSwipe() {
   if (fired.ret || !liveTrip) return;
   fired.ret = true;
-  ['btn-swipe2', 'btn-swipe3', 'btn-return'].forEach((b) => $(b).disabled = true);
+  ['btn-swipe2', 'btn-swipe3', 'btn-return', 'btn-folio'].forEach((b) => $(b).disabled = true);
 
   const T = TRIPS[liveTrip], S = tripState[liveTrip];
   logEvent({ amount: 6.2, merchant: 'Dulles Coffee Co', mcc: '5814', zip: '20120' },
@@ -339,10 +490,10 @@ function runWrap() {
   wrapRan = true;
   const T = TRIPS[liveTrip], S = tripState[liveTrip];
   const led = ledgerFor(liveTrip);
-  const ledger = led.total + S.booked;
+  const ledger = led.total;
   const stations = T.tiers.filter((t) => t.threshold <= S.spend).length;
   const claimedVal = [...S.claimed].reduce((a, id) => a + T.tiers.find((t) => t.id === id).value, 0);
-  const miles = Math.round(S.spend * 2 + S.booked * 5 + led.manualMiles);
+  const miles = Math.round(led.milesTotal);
   const top = S.swipes.reduce((a, b) => (b.amount > (a?.amount || 0) ? b : a), null);
 
   $('wrap-kicker').textContent = T.settled;
@@ -360,5 +511,23 @@ function runWrap() {
   $('w-fact').textContent = `${S.swipes.length} swipes in ${T.city} · ${led.count} txns on the trip ledger · ${S.bookedCount} stops pre-booked via C1 Travel (${fmt0(S.booked)})`
     + (S.saved || S.credits ? ` · 🛍 Shopping: saved ${fmt0(S.saved)} + ${fmt(S.credits)} credits` : '')
     + (vbMoments ? ` · ✦ ${vbMoments} Velocity Black moment${vbMoments > 1 ? 's' : ''}` : '');
+
+  const portalEl = $('w-portal');
+  if (portalEl) {
+    if (S.hotel || S.flight) {
+      const flightMiles = S.flight ? S.flight.total * 5 : 0;
+      const hotelMiles = S.hotel ? S.hotel.miles : 0;
+      const parts = [];
+      if (S.flight) parts.push(`✈️ 5x flight`);
+      if (S.hotel) parts.push(`🏨 10x hotel`);
+      portalEl.textContent = `${parts.join(' + ')} = ${Math.round(flightMiles + hotelMiles).toLocaleString()} miles from the portal alone`
+        + (S.hotel ? ` · $${S.hotel.creditApplied} credit applied` : '')
+        + (S.protectionAmt ? ` · price protection recovered ${fmt0(S.protectionAmt)}` : '');
+      portalEl.classList.remove('hidden');
+    } else {
+      portalEl.classList.add('hidden');
+    }
+  }
+  renderSplitModule(liveTrip);
   spawnConfetti(34);
 }

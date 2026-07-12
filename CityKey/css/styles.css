@@ -137,6 +137,29 @@
           letter-spacing: .12em; text-transform: uppercase; border-radius: 99px; padding: 3px 10px; }
   .night .chip { filter: brightness(1.4); }
 
+  /* ══════════ CAPITAL ONE TRAVEL · premium booking experience ══════════ */
+  .travel-shell { background: var(--surface); border: 1px solid var(--border); border-radius: 28px; overflow: hidden;
+                  transition: background .8s, border-color .8s; }
+  .travel-ask { background: radial-gradient(600px 240px at 15% -20%, color-mix(in srgb, var(--accent) 10%, transparent), transparent),
+                var(--surface); }
+  .travel-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px;
+                 transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease, border-color .3s ease; }
+  .travel-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -16px rgba(8,14,20,.32); border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
+  .travel-card.premier { border-color: rgba(212,175,55,.55); }
+  .travel-ribbon { background: linear-gradient(120deg,#0b0a0f 0%,#231a08 100%); color: #d4af37; }
+  .insight-row { display: flex; align-items: flex-start; gap: 12px; }
+  .insight-dot { width: 34px; height: 34px; border-radius: 999px; display: flex; align-items: center; justify-content: center;
+                 font-size: 15px; flex-shrink: 0; }
+  .btn-travel-primary { border-radius: 999px; padding: 13px 28px; font-weight: 700; font-size: 14px; background: #0276b1; color: #fff;
+                        transition: background .2s ease, transform .2s ease; white-space: nowrap; }
+  .btn-travel-primary:hover { background: #026597; transform: translateY(-1px); }
+  .btn-travel-primary:active { background: #014e74; transform: translateY(0); }
+  .btn-travel-ghost { border-radius: 999px; padding: 13px 26px; font-weight: 700; font-size: 14px;
+                      background: var(--surface); border: 1px solid var(--border); color: var(--text);
+                      transition: border-color .2s ease, color .2s ease; white-space: nowrap; }
+  .btn-travel-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .travel-stat { border-radius: 16px; background: var(--surface); padding: 14px 16px; }
+
   /* ══════════ VELOCITY BLACK · luxe layer ══════════ */
   .vb-btn { position: fixed; bottom: 24px; right: 24px; z-index: 60; width: 56px; height: 56px; border-radius: 99px;
             background: #0b0a0f; color: #d4af37; font-weight: 700; font-size: 13px; letter-spacing: .08em;

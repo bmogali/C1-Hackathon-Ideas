@@ -1,0 +1,16 @@
+{
+  "source": "/Users/bmogali/Documents/GitHub/C1-Hackathon-Ideas/CityKey/ios/VentureKey/Theme.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "%@%@",
+        "location": {
+          "startingColumn": 15,
+          "startingLine": 115
+        }
+      }
+    ]
+  },
+  "version": 1
+}

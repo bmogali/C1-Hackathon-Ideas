@@ -35,8 +35,8 @@ function renderTxns() {
           <p class="text-xs mut truncate mt-0.5">${t.date} · ${esc(t.desc)}</p>
         </div>
         <div class="text-right shrink-0">
-          <p class="font-bold" style="font-variant-numeric:tabular-nums;">-${fmt(t.amount)}</p>
-          <p class="text-[10px] acc font-bold">+${t.miles.toLocaleString()} mi</p>
+          <p class="font-bold" style="font-variant-numeric:tabular-nums; ${t.credit ? 'color:#5c8f1d;' : ''}">${t.credit ? '+' : '-'}${fmt(Math.abs(t.amount))}</p>
+          ${t.miles ? `<p class="text-[10px] acc font-bold">+${t.miles.toLocaleString()} mi</p>` : ''}
         </div>
         <span class="fnt text-sm transition-transform ${open ? 'rotate-90' : ''}">›</span>
       </div>
@@ -56,7 +56,9 @@ function renderTxns() {
                   : t.tag.mode === 'shop'
                   ? `🛍️ Auto-tagged to <u>${esc(TRIPS[t.tag.trip].name)}</u> by Capital One Shopping — trip gear`
                   : `🏷️ Tagged to <u>${esc(TRIPS[t.tag.trip].name)}</u>`}</p>
-                 ${t.tag.mode === 'manual' ? `<button onclick="event.stopPropagation(); untagTxn(${t.id})" class="text-[11px] font-bold fnt hover:opacity-70">✕ remove</button>` : ''}`
+                 ${t.tag.mode === 'manual' ? `<button onclick="event.stopPropagation(); untagTxn(${t.id})" class="text-[11px] font-bold fnt hover:opacity-70">✕ remove</button>` : ''}
+                 ${TRIPS[t.tag.trip].mates.length ? `<button onclick="event.stopPropagation(); openZelleComposer('${t.tag.trip}',0,${(t.amount / (1 + TRIPS[t.tag.trip].mates.length)).toFixed(2)},'${jsEsc(t.merchant)} — your share')"
+                     class="rounded-full text-white text-xs font-bold px-4 py-2 hover:brightness-110 active:scale-95 transition" style="background:#6d1ed4;">💸 Split this charge</button>` : ''}`
               : `<p class="microlabel fnt mr-1" style="letter-spacing:.15em;">Tag to a plan</p>
                  ${tagButtons}
                  <button onclick="event.stopPropagation(); openNewTrip()"
@@ -86,7 +88,12 @@ function untagTxn(id) {
 
 function ledgerFor(tripKey) {
   const list = txns.filter((t) => t.tag && t.tag.trip === tripKey);
-  return { count: list.length, total: list.reduce((a, t) => a + t.amount, 0), manualMiles: list.filter((t) => t.tag.mode === 'manual').reduce((a, t) => a + t.miles, 0) };
+  return {
+    count: list.length,
+    total: list.reduce((a, t) => a + t.amount, 0),
+    manualMiles: list.filter((t) => t.tag.mode === 'manual').reduce((a, t) => a + t.miles, 0),
+    milesTotal: list.reduce((a, t) => a + t.miles, 0),
+  };
 }
 
 function renderLedger() {
@@ -219,6 +226,18 @@ const ACCT_DETAILS = {
   },
 };
 
+/* ── 360 Checking is where Zelle money actually lands · never the card ── */
+let checkingActivity = [...ACCT_DETAILS.checking.txns];
+function checkingBal() { return ACCOUNTS.find((a) => a.key === 'checking').bal; }
+function creditChecking(amount, icon, name, date) {
+  const acc = ACCOUNTS.find((a) => a.key === 'checking');
+  acc.bal += amount;
+  checkingActivity.unshift({ icon, name, date, amt: amount });
+  renderWallet();
+  if (selectedAcct === 'checking' && curScreen === 'acct2') renderAcct2();
+}
+function debitChecking(amount, icon, name, date) { creditChecking(-amount, icon, name, date); }
+
 function pickAccount(key) {
   if (key === 'venturex') { go('account'); return; }
   selectedAcct = key;
@@ -238,6 +257,10 @@ function renderAcctSwitch() {
 function renderAcct2() {
   const a = ACCOUNTS.find((x) => x.key === selectedAcct), d = ACCT_DETAILS[selectedAcct];
   const th = CARD_THEMES[selectedAcct];
+  const vitals = selectedAcct === 'checking'
+    ? [['Available balance', fmt(checkingBal()), 'no fees · no minimums'], ...d.vitals.slice(1)]
+    : d.vitals;
+  const activityList = selectedAcct === 'checking' ? checkingActivity : d.txns;
   $('acct2-body').innerHTML = `
     <div class="flex items-end justify-between flex-wrap gap-4">
       <div>
@@ -257,7 +280,7 @@ function renderAcct2() {
     </div>
 
     <div class="mt-5 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-3xl">
-      ${d.vitals.map(([k, v, n]) => `
+      ${vitals.map(([k, v, n]) => `
         <div class="srf rounded-2xl p-5">
           <p class="microlabel fnt">${k}</p>
           <p class="text-2xl font-bold mt-1.5" style="font-variant-numeric:tabular-nums;">${v}</p>
@@ -286,7 +309,7 @@ function renderAcct2() {
     <div class="mt-8 max-w-3xl">
       <p class="microlabel fnt mb-3">Recent activity</p>
       <div class="srf rounded-3xl overflow-hidden">
-        ${d.txns.map((t) => `
+        ${activityList.map((t) => `
           <div class="px-5 py-4 flex items-center gap-4 border-b last:border-b-0" style="border-color: var(--border);">
             <span class="h-10 w-10 rounded-full srf2 flex items-center justify-center text-lg shrink-0">${t.icon}</span>
             <div class="flex-1 min-w-0">
