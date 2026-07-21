@@ -88,6 +88,19 @@ struct ZelleRequest: Identifiable {
 
 enum ZelleStatus { case requested, received }
 
+// ── Capital One Offers · card-linked, activate-then-spend-then-credit ──
+enum OfferStatus { case available, activated, redeemed }
+
+struct Offer: Identifiable {
+    let id: String
+    let merchant: String        // must match a ScriptSwipe.merchant to ever redeem
+    let icon: String
+    let terms: String           // display copy, e.g. "5% back, up to $8"
+    let creditAmount: Double    // flat mock credit posted on a matching swipe
+    let radiusLabel: String     // proximity chip — derived from trip MSA/zip, not GPS
+    var status: OfferStatus = .available
+}
+
 // ── Capital One Shopping · trip intelligence context ──
 enum WXKind {
     case hot, cold, rain, mild
@@ -162,6 +175,7 @@ struct Trip: Identifiable {
     let swipe3: ScriptSwipe
     let vb: [VBRequest]
     let vbStation: VBStation?
+    var offers: [Offer] = []
     var isStandalone = false
 }
 
@@ -184,6 +198,7 @@ struct TripSession {
     var vbUsed: Set<Int> = []        // indices into trip.vb
     var vbExpress = false            // express station accepted
     var vbMessages: [VBMsg] = []
+    var redeemedOfferTotal: Double = 0   // Capital One Offers · cash back credited this trip
 }
 
 // ═══ seed data ═══
@@ -237,7 +252,15 @@ enum Seed {
                       stopTime: "18:40", stopTitle: "Vineyard dinner · heli transfer", stopSub: "Curated by Velocity Black"),
         ],
         vbStation: VBStation(threshold: 350, title: "Private Seine boat at golden hour",
-                             desc: "Skipper, champagne, 90 minutes — the river to yourselves.")
+                             desc: "Skipper, champagne, 90 minutes — the river to yourselves."),
+        offers: [
+            Offer(id: "off-paris-1", merchant: "Le Baristas", icon: "☕", terms: "5% back, up to $8",
+                  creditAmount: 8, radiusLabel: "0.2 mi from Base Camp"),
+            Offer(id: "off-paris-2", merchant: "Bistro Chez Anne", icon: "🍷", terms: "3x miles, first $50",
+                  creditAmount: 12, radiusLabel: "0.4 mi from Base Camp"),
+            Offer(id: "off-paris-3", merchant: "Musée d'Orsay Boutique", icon: "🖼️", terms: "10% back, up to $15",
+                  creditAmount: 15, radiusLabel: "0.6 mi from Base Camp"),
+        ]
     )
 
     static let nyc = Trip(
@@ -284,7 +307,15 @@ enum Seed {
                       stopTime: "19:30", stopTitle: "Knicks — courtside", stopSub: "MSG · players' tunnel entrance"),
         ],
         vbStation: VBStation(threshold: 300, title: "After-hours MoMA with a curator",
-                             desc: "The Starry Night with no one else in the room.")
+                             desc: "The Starry Night with no one else in the room."),
+        offers: [
+            Offer(id: "off-nyc-1", merchant: "Ess-a-Bagel", icon: "🥯", terms: "5% back, up to $6",
+                  creditAmount: 6, radiusLabel: "0.3 mi from Base Camp"),
+            Offer(id: "off-nyc-2", merchant: "Joe's Pizza", icon: "🍕", terms: "3x miles, first $40",
+                  creditAmount: 10, radiusLabel: "0.5 mi from Base Camp"),
+            Offer(id: "off-nyc-3", merchant: "MoMA Design Store", icon: "🎨", terms: "10% back, up to $20",
+                  creditAmount: 20, radiusLabel: "0.7 mi from Base Camp"),
+        ]
     )
 
     static let sfo = Trip(
@@ -331,7 +362,15 @@ enum Seed {
                       stopTime: "20:30", stopTitle: "Chef's counter — the pass", stopSub: "Secured by Velocity Black"),
         ],
         vbStation: VBStation(threshold: 320, title: "A table at the city's quietest kitchen",
-                             desc: "Ask the concierge — members only.")
+                             desc: "Ask the concierge — members only."),
+        offers: [
+            Offer(id: "off-sfo-1", merchant: "Boudin Bakery", icon: "🍜", terms: "5% back, up to $8",
+                  creditAmount: 8, radiusLabel: "0.3 mi from Base Camp"),
+            Offer(id: "off-sfo-2", merchant: "Tartine Manufactory", icon: "🥐", terms: "3x miles, first $40",
+                  creditAmount: 10, radiusLabel: "0.6 mi from Base Camp"),
+            Offer(id: "off-sfo-3", merchant: "SFMOMA Store", icon: "🎨", terms: "10% back, up to $15",
+                  creditAmount: 15, radiusLabel: "0.5 mi from Base Camp"),
+        ]
     )
 
     static let miami = Trip(
@@ -378,7 +417,15 @@ enum Seed {
                       stopTime: "11:00", stopTitle: "Hidden sandbar day trip", stopSub: "Private charter · Velocity Black"),
         ],
         vbStation: VBStation(threshold: 300, title: "The table South Beach pretends is full",
-                             desc: "Ask the concierge — members only.")
+                             desc: "Ask the concierge — members only."),
+        offers: [
+            Offer(id: "off-miami-1", merchant: "Versailles Restaurant", icon: "🥭", terms: "5% back, up to $8",
+                  creditAmount: 8, radiusLabel: "0.4 mi from Base Camp"),
+            Offer(id: "off-miami-2", merchant: "La Mar by Gastón", icon: "🐟", terms: "3x miles, first $50",
+                  creditAmount: 12, radiusLabel: "0.6 mi from Base Camp"),
+            Offer(id: "off-miami-3", merchant: "Pérez Art Museum Shop", icon: "🎨", terms: "10% back, up to $15",
+                  creditAmount: 15, radiusLabel: "0.5 mi from Base Camp"),
+        ]
     )
 
     static let orlando = Trip(
@@ -425,7 +472,15 @@ enum Seed {
                       stopTime: "20:30", stopTitle: "Rooftop fireworks viewing", stopSub: "Reserved terrace · Velocity Black"),
         ],
         vbStation: VBStation(threshold: 350, title: "A ride the park closes just for you",
-                             desc: "Ask the concierge — members only.")
+                             desc: "Ask the concierge — members only."),
+        offers: [
+            Offer(id: "off-orlando-1", merchant: "Beaches & Cream", icon: "🍦", terms: "5% back, up to $6",
+                  creditAmount: 6, radiusLabel: "0.3 mi from Base Camp"),
+            Offer(id: "off-orlando-2", merchant: "Toothsome Emporium", icon: "🍫", terms: "3x miles, first $50",
+                  creditAmount: 14, radiusLabel: "0.8 mi from Base Camp"),
+            Offer(id: "off-orlando-3", merchant: "Epic Universe Store", icon: "🎢", terms: "10% back, up to $20",
+                  creditAmount: 20, radiusLabel: "1.0 mi from Base Camp"),
+        ]
     )
 
     /// Standalone template — City Key self-provisions this from MSA + MCC alone
@@ -465,6 +520,14 @@ enum Seed {
         ],
         vbStation: VBStation(threshold: 280, title: "A table Chicago pretends not to have",
                              desc: "Ask the concierge — members only."),
+        offers: [
+            Offer(id: "off-chicago-1", merchant: "Lou Malnati's", icon: "🍕", terms: "5% back, up to $8",
+                  creditAmount: 8, radiusLabel: "0.2 mi from Base Camp"),
+            Offer(id: "off-chicago-2", merchant: "Au Cheval", icon: "🍔", terms: "3x miles, first $50",
+                  creditAmount: 12, radiusLabel: "0.4 mi from Base Camp"),
+            Offer(id: "off-chicago-3", merchant: "Art Institute Shop", icon: "🎨", terms: "10% back, up to $15",
+                  creditAmount: 15, radiusLabel: "0.6 mi from Base Camp"),
+        ],
         isStandalone: true
     )
 }

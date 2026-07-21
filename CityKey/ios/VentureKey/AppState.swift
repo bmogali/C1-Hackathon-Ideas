@@ -78,6 +78,21 @@ final class AppState: ObservableObject {
         }
         if args.contains("-plan") { tab = .plan; sessions["paris"]?.travelIntent = true }
         if args.contains("-wallet") { tab = .wallet }
+        if args.contains("-offerdemo") {
+            // QA path only — exercises the real activate → swipe → redeem pipeline, not a shortcut around it.
+            Task { @MainActor in
+                self.curTripID = "paris"
+                self.fireIgnition()
+                try? await Task.sleep(nanoseconds: 3_000_000_000)
+                self.activateOffer("paris", "off-paris-1")
+                try? await Task.sleep(nanoseconds: 500_000_000)
+                self.fireProgressSwipe()
+                if args.contains("-offerwrap") {
+                    try? await Task.sleep(nanoseconds: 800_000_000)
+                    self.fireReturn()
+                }
+            }
+        }
     }
 
     private func debugFastForward(wrap: Bool) {
@@ -202,6 +217,29 @@ final class AppState: ObservableObject {
         showToast("🅿️", "Bought on \(item.retailer)", "\(item.name) · paid with Paze")
     }
 
+    // ═══ Capital One Offers · card-linked, activate-then-spend-then-credit ═══
+
+    func activateOffer(_ tripID: String, _ offerID: String) {
+        guard let idx = trips[tripID]?.offers.firstIndex(where: { $0.id == offerID }),
+              trips[tripID]!.offers[idx].status == .available else { return }
+        trips[tripID]?.offers[idx].status = .activated
+        let offer = trips[tripID]!.offers[idx]
+        showToast("💳", "Offer added to Venture X", "Spend at \(offer.merchant) to earn \(offer.terms.lowercased())")
+    }
+
+    /// Called right after any scripted swipe posts — never retroactive: only offers
+    /// already `.activated` at the moment of the swipe can match.
+    private func checkOfferMatch(_ tripID: String, merchant: String) {
+        guard let idx = trips[tripID]?.offers.firstIndex(where: { $0.merchant == merchant && $0.status == .activated }) else { return }
+        trips[tripID]?.offers[idx].status = .redeemed
+        let offer = trips[tripID]!.offers[idx]
+        sessions[tripID]?.redeemedOfferTotal += offer.creditAmount
+        postTxn(Txn(icon: "💳", merchant: "Capital One Offers", desc: "\(offer.merchant) · card-linked offer",
+                    amount: offer.creditAmount, isCredit: true, miles: 0))
+        hapticTick += 1
+        showToast("💳", "Capital One Offers", "\(offer.merchant) · +\(money2(offer.creditAmount)) back")
+    }
+
     // ═══ Price Watch · guards the plan's tickets ═══
 
     func applyDrop(_ tripID: String, dayIdx: Int, stopIdx: Int) {
@@ -303,7 +341,13 @@ final class AppState: ObservableObject {
                           reply: "Consider it held. The chef's counter at the hardest booking in \(city), first night, 20:30.",
                           stopTime: "20:30", stopTitle: "\(city) — the impossible table", stopSub: "Secured by Velocity Black"),
             ],
-            vbStation: VBStation(threshold: 350, title: "A night \(city) doesn't sell", desc: "Ask the concierge — members only.")
+            vbStation: VBStation(threshold: 350, title: "A night \(city) doesn't sell", desc: "Ask the concierge — members only."),
+            offers: [
+                Offer(id: "off-\(key)-1", merchant: "Café \(city)", icon: "☕", terms: "5% back, up to $8",
+                      creditAmount: 8, radiusLabel: "0.3 mi from Base Camp"),
+                Offer(id: "off-\(key)-2", merchant: "Bistro \(city)", icon: "🍽️", terms: "3x miles, first $50",
+                      creditAmount: 12, radiusLabel: "0.5 mi from Base Camp"),
+            ]
         )
         trips[key] = trip
         sessions[key] = TripSession()
@@ -366,6 +410,7 @@ final class AppState: ObservableObject {
                 Swipe(merchant: merchant, amount: ign.amount, cum: ign.amount, icon: ign.icon, note: ign.note))
             self.postTxn(Txn(icon: ign.icon, merchant: merchant, desc: "Ignition swipe · City Key live",
                              amount: ign.amount, isCredit: false, miles: Int(ign.amount * 2)))
+            self.checkOfferMatch(self.curTripID, merchant: merchant)
             self.tab = .cityKey
             self.showToast("🗝️", trip.isStandalone ? "City Key auto-provisioned" : "City Key activated",
                            trip.isStandalone
@@ -380,6 +425,7 @@ final class AppState: ObservableObject {
         sessions[id]?.spend = cum
         sessions[id]?.swipes.append(Swipe(merchant: s.merchant, amount: s.amount, cum: cum, icon: s.icon, note: s.note))
         postTxn(Txn(icon: s.icon, merchant: s.merchant, desc: s.note, amount: s.amount, isCredit: false, miles: Int(s.amount * 2)))
+        checkOfferMatch(id, merchant: s.merchant)
         showSimulator = false
         tab = .cityKey
         if let t = tier, cum >= t.threshold {

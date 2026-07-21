@@ -52,6 +52,11 @@ const TRIPS = {
       { icon: '🚁', ask: 'Something unforgettable for the last evening', reply: 'Leave the last evening to us. Helicopter from Issy at 18:40, dinner in a vineyard outside Versailles, back by midnight.', stop: { day: 1, time: '18:40', cat: 'entertainment', title: 'Vineyard dinner · heli transfer', sub: 'Curated end-to-end by Velocity Black' } },
     ],
     vbStation: { threshold: 350, title: 'Private Seine boat at golden hour', desc: 'Skipper, champagne, 90 minutes — the river to yourselves.' },
+    offers: [
+      { id: 'off-paris-1', merchant: 'Le Baristas', icon: '☕', terms: '5% back, up to $8', creditAmount: 8, radiusLabel: '0.2 mi from Base Camp' },
+      { id: 'off-paris-2', merchant: 'Bistro Chez Anne', icon: '🍷', terms: '3x miles, first $50', creditAmount: 12, radiusLabel: '0.4 mi from Base Camp' },
+      { id: 'off-paris-3', merchant: "Musée d'Orsay Boutique", icon: '🖼️', terms: '10% back, up to $15', creditAmount: 15, radiusLabel: '0.6 mi from Base Camp' },
+    ],
   },
 
   nyc: {
@@ -102,6 +107,11 @@ const TRIPS = {
       { icon: '🏀', ask: 'Courtside at the Garden', reply: "Two courtside for Friday. You'll enter through the players' tunnel lounge — ask for Marcus.", stop: { day: 1, time: '19:30', cat: 'entertainment', title: 'Knicks — courtside', sub: "MSG · players' tunnel entrance" } },
     ],
     vbStation: { threshold: 300, title: 'After-hours MoMA with a curator', desc: 'The Starry Night with no one else in the room.' },
+    offers: [
+      { id: 'off-nyc-1', merchant: 'Ess-a-Bagel', icon: '🥯', terms: '5% back, up to $6', creditAmount: 6, radiusLabel: '0.3 mi from Base Camp' },
+      { id: 'off-nyc-2', merchant: "Joe's Pizza + MoMA Store", icon: '🍕', terms: '3x miles, first $40', creditAmount: 10, radiusLabel: '0.5 mi from Base Camp' },
+      { id: 'off-nyc-3', merchant: 'MoMA Design Store', icon: '🎨', terms: '10% back, up to $20', creditAmount: 20, radiusLabel: '0.7 mi from Base Camp' },
+    ],
   },
 
   sfo: {
@@ -148,6 +158,11 @@ const TRIPS = {
       { icon: '🌉', ask: 'A private sunset sail under the Golden Gate', reply: 'A 40-foot sloop, just for you, out past Fort Point as the fog burns gold. Skipper meets you at the marina at 18:00.', stop: { day: 1, time: '18:00', cat: 'entertainment', title: 'Golden Gate sunset sail', sub: 'Private skippered sloop · Velocity Black' } },
     ],
     vbStation: { threshold: 320, title: "A table at the city's quietest kitchen", desc: 'Ask the concierge — members only.' },
+    offers: [
+      { id: 'off-sfo-1', merchant: 'Boudin Bakery', icon: '🍜', terms: '5% back, up to $8', creditAmount: 8, radiusLabel: '0.3 mi from Base Camp' },
+      { id: 'off-sfo-2', merchant: 'Tartine Manufactory', icon: '🥐', terms: '3x miles, first $40', creditAmount: 10, radiusLabel: '0.6 mi from Base Camp' },
+      { id: 'off-sfo-3', merchant: 'SFMOMA Store', icon: '🎨', terms: '10% back, up to $15', creditAmount: 15, radiusLabel: '0.5 mi from Base Camp' },
+    ],
   },
 
   miami: {
@@ -196,6 +211,11 @@ const TRIPS = {
       { icon: '🚤', ask: 'Something only the yacht crowd knows about', reply: "A sandbar off Key Biscayne that doesn't show up on the apps. Boat leaves the marina at 11:00 — bring sunscreen.", stop: { day: 1, time: '11:00', cat: 'entertainment', title: 'Hidden sandbar day trip', sub: 'Private charter · Velocity Black' } },
     ],
     vbStation: { threshold: 300, title: 'The table South Beach pretends is full', desc: 'Ask the concierge — members only.' },
+    offers: [
+      { id: 'off-miami-1', merchant: 'Versailles Restaurant', icon: '🥭', terms: '5% back, up to $8', creditAmount: 8, radiusLabel: '0.4 mi from Base Camp' },
+      { id: 'off-miami-2', merchant: 'La Mar by Gastón Acurio', icon: '🐟', terms: '3x miles, first $50', creditAmount: 12, radiusLabel: '0.6 mi from Base Camp' },
+      { id: 'off-miami-3', merchant: 'Pérez Art Museum Shop', icon: '🎨', terms: '10% back, up to $15', creditAmount: 15, radiusLabel: '0.5 mi from Base Camp' },
+    ],
   },
 
   orlando: {
@@ -244,11 +264,17 @@ const TRIPS = {
       { icon: '🎆', ask: 'Best fireworks view in the park, reserved', reply: 'A rooftop terrace above Main Street, champagne for the adults, held from 20:30.', stop: { day: 1, time: '20:30', cat: 'entertainment', title: 'Rooftop fireworks viewing', sub: 'Reserved terrace · Velocity Black' } },
     ],
     vbStation: { threshold: 350, title: 'A ride the park closes just for you', desc: 'Ask the concierge — members only.' },
+    offers: [
+      { id: 'off-orlando-1', merchant: 'Beaches & Cream', icon: '🍦', terms: '5% back, up to $6', creditAmount: 6, radiusLabel: '0.3 mi from Base Camp' },
+      { id: 'off-orlando-2', merchant: 'Toothsome Chocolate Emporium', icon: '🍫', terms: '3x miles, first $50', creditAmount: 14, radiusLabel: '0.8 mi from Base Camp' },
+      { id: 'off-orlando-3', merchant: 'Epic Universe Store', icon: '🎢', terms: '10% back, up to $20', creditAmount: 20, radiusLabel: '1.0 mi from Base Camp' },
+    ],
   },
 };
 
 const freshTripState = () => ({ active: false, settled: false, spend: 0, swipes: [], claimed: new Set(), booked: 0, bookedCount: 0, credits: 0, saved: 0, bought: new Set(), vbThread: [], vbUsed: new Set(), vbGreeted: false, vbExpress: false,
-  armed: false, hotel: null, flight: null, hotelAnnounced: false, folioCount: 0, protectionAmt: 0, travelIntent: null, travelExpanded: false, zelleRequests: [] });
+  armed: false, hotel: null, flight: null, hotelAnnounced: false, folioCount: 0, protectionAmt: 0, travelIntent: null, travelExpanded: false, zelleRequests: [],
+  offerStatus: {}, offerCredits: 0 });
 const tripState = { paris: freshTripState(), nyc: freshTripState(), sfo: freshTripState(), miami: freshTripState(), orlando: freshTripState() };
 
 let simTrip = 'paris', viewTrip = 'paris', liveTrip = null, curScreen = 'home';
@@ -446,4 +472,9 @@ const STANDALONE = {
     { icon: '🎷', ask: 'Something after midnight', reply: "There's a basement in Uptown where the second set never gets announced. Door knows your name now.", stop: { day: 0, time: '00:30', cat: 'entertainment', title: 'Unannounced second set', sub: 'Location shared day-of · Velocity Black' } },
   ],
   vbStation: { threshold: 280, title: 'A table Chicago pretends not to have', desc: 'Ask the concierge — members only.' },
+  offers: [
+    { id: 'off-chicago-1', merchant: "Lou Malnati's", icon: '🍕', terms: '5% back, up to $8', creditAmount: 8, radiusLabel: '0.2 mi from Base Camp' },
+    { id: 'off-chicago-2', merchant: 'Au Cheval', icon: '🍔', terms: '3x miles, first $50', creditAmount: 12, radiusLabel: '0.4 mi from Base Camp' },
+    { id: 'off-chicago-3', merchant: 'Art Institute Shop', icon: '🎨', terms: '10% back, up to $15', creditAmount: 15, radiusLabel: '0.6 mi from Base Camp' },
+  ],
 };

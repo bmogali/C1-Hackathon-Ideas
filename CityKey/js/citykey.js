@@ -131,6 +131,7 @@ function renderLiveHeader() {
         </div>`;
     } else alone.classList.add('hidden');
   }
+  renderOffersRail();
 }
 
 function renderLine(newTierIds = []) {
@@ -346,6 +347,7 @@ function fireIgnition() {
     S.spend = sc.amount;
     S.swipes.push({ merchant: ignMerchant, amount: sc.amount, cum: sc.amount, icon: sc.icon, time: sc.time, note: sc.note });
     addTxn({ icon: sc.icon, merchant: ignMerchant, desc: ignDesc, date: sc.date, amount: sc.amount, mcc: sc.mcc, category: 'Lodging', location: sc.location, miles: sc.amount * 2, tag: { trip: liveTrip, mode: 'auto' } });
+    maybeRedeemOffer(liveTrip, ignMerchant, sc.mcc, sc.date);
 
     $('mode-text').innerHTML = `<span class="inline-block h-1.5 w-1.5 rounded-full bg-c1red live-dot align-middle mr-1.5"></span>Live · ${T.city}`;
     $('home-ck').innerHTML = `🗝️ <span class="acc">Live in ${T.city}</span> — the line is lit`;
@@ -381,6 +383,7 @@ function fireFolioSwipe() {
   S.spend = cum;
   S.swipes.push({ merchant: hotelName, amount, cum, icon: '🛎️', time: '—', note: 'MCC 7011 · minibar & incidentals' });
   addTxn({ icon: '🛎️', merchant: hotelName, desc: 'Minibar & incidentals', date: T.script.s2.date, amount, mcc: '7011', category: 'Lodging', location: T.script.ign.location, miles: amount * 2, tag: { trip: liveTrip, mode: 'auto' } });
+  maybeRedeemOffer(liveTrip, hotelName, '7011', T.script.s2.date);
   renderLine();
   renderRail();
   if (S.folioCount >= 3) $('btn-folio').disabled = true;
@@ -427,6 +430,7 @@ function fireProgressSwipe() {
   S.spend = cum;
   S.swipes.push({ merchant: sc.merchant, amount: sc.amount, cum, icon: sc.icon, time: sc.time, note: `MCC ${sc.mcc} · ${sc.note}` });
   addTxn({ icon: sc.icon, merchant: sc.merchant, desc: sc.note, date: sc.date, amount: sc.amount, mcc: sc.mcc, category: 'Dining', location: sc.location, miles: sc.amount * 2, tag: { trip: liveTrip, mode: 'auto' } });
+  maybeRedeemOffer(liveTrip, sc.merchant, sc.mcc, sc.date);
   go('live');
   renderLine();
   renderRail();
@@ -451,6 +455,7 @@ function fireTierSwipe() {
   S.spend = cum;
   S.swipes.push({ merchant: sc.merchant, amount: sc.amount, cum, icon: sc.icon, time: sc.time, note: `MCC ${sc.mcc} · ${sc.note}` });
   addTxn({ icon: sc.icon, merchant: sc.merchant, desc: sc.note, date: sc.date, amount: sc.amount, mcc: sc.mcc, category: 'Dining', location: sc.location, miles: sc.amount * 2, tag: { trip: liveTrip, mode: 'auto' } });
+  maybeRedeemOffer(liveTrip, sc.merchant, sc.mcc, sc.date);
   go('live');
   renderLine([2]);
   renderRail();
@@ -510,7 +515,8 @@ function runWrap() {
   const vbMoments = S.vbUsed.size + (S.vbExpress ? 1 : 0);
   $('w-fact').textContent = `${S.swipes.length} swipes in ${T.city} · ${led.count} txns on the trip ledger · ${S.bookedCount} stops pre-booked via C1 Travel (${fmt0(S.booked)})`
     + (S.saved || S.credits ? ` · 🛍 Shopping: saved ${fmt0(S.saved)} + ${fmt(S.credits)} credits` : '')
-    + (vbMoments ? ` · ✦ ${vbMoments} Velocity Black moment${vbMoments > 1 ? 's' : ''}` : '');
+    + (vbMoments ? ` · ✦ ${vbMoments} Velocity Black moment${vbMoments > 1 ? 's' : ''}` : '')
+    + (S.offerCredits ? ` · 💳 Capital One Offers redeemed: ${fmt(S.offerCredits)} back` : '');
 
   const portalEl = $('w-portal');
   if (portalEl) {

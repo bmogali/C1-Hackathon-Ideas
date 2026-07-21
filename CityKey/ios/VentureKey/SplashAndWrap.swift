@@ -146,7 +146,7 @@ struct WrapView: View {
                     stat("Trip ledger", money(session.spend))
                     stat("Miles earned", "\(Int(session.spend * 2).formatted())", tint: Color(hex: 0x6FD6E8))
                     stat("Stations", "\(stationsUnlocked) of 3")
-                    stat("Wallet share", "100%")
+                    stat("Offers redeemed", money2(session.redeemedOfferTotal), tint: Color(hex: 0x6FD6E8))
                 }
             }
             .padding(24)

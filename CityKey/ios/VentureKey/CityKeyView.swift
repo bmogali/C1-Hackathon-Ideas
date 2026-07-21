@@ -13,10 +13,16 @@ struct CityKeyView: View {
                subtitle: heroSub, showVBButton: live) {
             if live {
                 spendRail.drift()
+                if !app.curTrip.offers.isEmpty {
+                    offersRail.drift()
+                }
                 SectionHeader(text: "The line", pal: app.pal)
                 LineView(trip: app.curTrip, session: session)
             } else {
                 dormantCard.drift()
+                if session.armed, !app.curTrip.offers.isEmpty {
+                    offersRail.drift()
+                }
             }
         }
     }
@@ -102,6 +108,73 @@ struct CityKeyView: View {
     private var progressFraction: CGFloat {
         guard let next = app.curTrip.tiers.first(where: { session.spend < $0.threshold }) else { return 1 }
         return CGFloat(min(1, session.spend / next.threshold))
+    }
+
+    // ── Capital One Offers · nearby, card-linked ──
+    private var offersRail: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            SectionHeader(text: "Nearby offers · Capital One Offers", pal: app.pal)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    ForEach(app.curTrip.offers) { offer in
+                        OfferCard(offer: offer)
+                    }
+                }
+                .padding(.horizontal, 2)
+                .padding(.bottom, 2)
+            }
+        }
+    }
+}
+
+private struct OfferCard: View {
+    @EnvironmentObject var app: AppState
+    let offer: Offer
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                IconBadge(symbol: sym(offer.icon), tint: app.pal.accent, size: 32)
+                Spacer()
+                if offer.status == .redeemed {
+                    Image(systemName: "checkmark.seal.fill")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(Color.keyGreenDark)
+                }
+            }
+            VStack(alignment: .leading, spacing: 2) {
+                Text(offer.merchant)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(app.pal.ink)
+                    .lineLimit(1)
+                Text(offer.terms)
+                    .font(.caption)
+                    .foregroundStyle(app.pal.sub)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Text(offer.radiusLabel)
+                .font(.caption2)
+                .foregroundStyle(app.pal.faint)
+            Spacer(minLength: 4)
+            actionButton
+        }
+        .padding(14)
+        .frame(width: 168, height: 168, alignment: .topLeading)
+        .background(app.pal.card, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .shadow(color: .black.opacity(app.act == .midnight ? 0 : 0.05), radius: 10, y: 4)
+    }
+
+    @ViewBuilder private var actionButton: some View {
+        switch offer.status {
+        case .available:
+            Button("Activate") { app.activateOffer(app.curTripID, offer.id) }
+                .buttonStyle(CapsuleButtonStyle(kind: .tinted, pal: app.pal, compact: true))
+        case .activated:
+            Tag(text: "Activated ✓", color: .keyGreenDark)
+        case .redeemed:
+            Tag(text: "Redeemed", color: .keyGreenDark)
+        }
     }
 }
 
